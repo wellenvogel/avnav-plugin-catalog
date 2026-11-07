@@ -1,0 +1,12 @@
+---
+layout: default
+---
+
+<div class="list-container">
+    {% for item in site.data.plugins %}
+      <div class="list-item">
+        <h2>{{ item.name }}</h2>
+        <p>{{ item.description }}</p>
+      </div>
+    {% endfor %}
+</div>
