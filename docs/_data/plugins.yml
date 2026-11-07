@@ -1,0 +1,15 @@
+- name: font-noto
+  description: Noto fonts for AvNav
+  version: 20260707
+  author: Nobody
+  license: MIT
+  github_url: "https://github.com/wellenvogel/avnav-font-noto"
+  download_url: "https://github.com/wellenvogel/avnav-font-noto/releases/download/$version/font-noto-$version.zip"
+
+- name: font-roboto
+  description: Roboto fonts for AvNav
+  version: 20260707
+  author: Nobody
+  license: MIT
+  github_url: "https://github.com/wellenvogel/avnav-font-roboto"
+  download_url: "https://github.com/wellenvogel/avnav-font-roboto/releases/download/$version/font-roboto-$version.zip"

@@ -1,3 +1,3 @@
 ---
-    layout: side
+    layout: list
 ---
