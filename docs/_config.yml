@@ -27,11 +27,15 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  wellenvogel
 repository: wellenvogel/avnav-plugin-catalog
 
+lccode: "en"
+avnav_docbase_de: "https://www.wellenvogel.de/software/avnav/newDoc/latest/index.html"
+avnav_docbase_en: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/index.html"
+
 # Build settings
 theme: jekyll-theme-minimal
-#plugins:
+plugins:
   #- jekyll-feed
-  #- jekyll-relative-links
+  - jekyll-relative-links
 
 # Exclude from processing.
 # The following items will not be processed, by default.
