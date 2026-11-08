@@ -1,0 +1,26 @@
+.wrapper {
+  width: min(1400px, calc(100% - 4rem));
+}
+
+.wrapper header,
+.wrapper footer {
+  width: 250px;
+}
+
+.wrapper section {
+  width: calc(100% - 290px);
+}
+
+@media (max-width: 960px) {
+  .wrapper {
+    width: auto;
+  }
+
+  .wrapper header,
+  .wrapper section,
+  .wrapper footer {
+    float: none;
+    position: static;
+    width: auto;
+  }
+}

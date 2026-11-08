@@ -1,66 +1,8 @@
 ---
 layout: default
 ---
+<link rel="stylesheet" href="{{ '/assets/css/list.css' | relative_url }}">
+
 {{ content }}
 
-<div class="list-container">
-    {% for item in site.data.plugins %}
-      {% assign download_url = item.download_url | replace: '$version', item.version %}
-      <div class="list-item">
-        <h2>{{ item.name }}</h2>
-        <p>{{ item.description }}</p>
-        <dl>
-          <dt>Version</dt>
-          <dd>{{ item.version }}</dd>
-          <dt>Author</dt>
-          <dd>{{ item.author }}</dd>
-          <dt>License</dt>
-          <dd>{{ item.license }}</dd>
-        </dl>
-        <div class="list-item-links">
-          <a href="{{ download_url | escape }}">Download</a>
-          <a href="{{ item.github_url | escape }}">GitHub</a>
-        </div>
-      </div>
-    {% endfor %}
-</div>
-
-<style>
-  .list-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-    gap: 1rem;
-  }
-
-  .list-item {
-    padding: 1.25rem;
-    border: 1px solid #d0d7de;
-    border-radius: 0.5rem;
-    background: #fff;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 8%);
-  }
-
-  .list-item h2 {
-    margin-top: 0;
-  }
-
-  .list-item dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.25rem 0.75rem;
-  }
-
-  .list-item dt {
-    font-weight: bold;
-  }
-
-  .list-item dd {
-    margin: 0;
-  }
-
-  .list-item-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-</style>
+{% include list-container.html %}

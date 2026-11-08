@@ -1,15 +1,23 @@
 - name: font-noto
-  description: Noto fonts for AvNav
+  description: 
+    en: Noto fonts for AvNav
+    de: Noto-Fonts für AvNav
   version: 20260707
-  author: Nobody
+  author: wellenvogel
   license: MIT
-  github_url: "https://github.com/wellenvogel/avnav-font-noto"
+  src_url: "https://github.com/wellenvogel/avnav-font-noto"
   download_url: "https://github.com/wellenvogel/avnav-font-noto/releases/download/$version/font-noto-$version.zip"
+  kind: [android,linux,windows,raspberry]
+  update: github
 
 - name: font-roboto
-  description: Roboto fonts for AvNav
+  description: 
+    en: Roboto fonts for AvNav
+    de: Roboto-Fonts für AvNav
   version: 20260707
-  author: Nobody
+  author: wellenvogel
   license: MIT
-  github_url: "https://github.com/wellenvogel/avnav-font-roboto"
+  src_url: "https://github.com/wellenvogel/avnav-font-roboto"
   download_url: "https://github.com/wellenvogel/avnav-font-roboto/releases/download/$version/font-roboto-$version.zip"
+  kind: [android,linux,windows,raspberry]
+  update: github

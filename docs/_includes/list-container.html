@@ -1,0 +1,25 @@
+<!-- agents: hidden fields: kind, update -->
+
+<div class="list-container">
+  {% assign card_language = page.lang | default: 'en' %}
+  {% assign card_titles = site.data.cards %}
+  {% for item in site.data.plugins %}
+    {% assign download_url = item.download_url | replace: '$version', item.version %}
+    <div class="list-item" id="plugin-card-{{ forloop.index }}">
+      <h2>{{ item.name }}</h2>
+      <p>{{ item.description[card_language] | default: item.description.en }}</p>
+      <dl>
+        <dt>{{ card_titles.version[card_language] | default: card_titles.version.en }}</dt>
+        <dd>{{ item.version }}</dd>
+        <dt>{{ card_titles.author[card_language] | default: card_titles.author.en }}</dt>
+        <dd>{{ item.author }}</dd>
+        <dt>{{ card_titles.license[card_language] | default: card_titles.license.en }}</dt>
+        <dd>{{ item.license }}</dd>
+      </dl>
+      <div class="list-item-links">
+        <a href="{{ download_url | escape }}">{{ card_titles.download[card_language] | default: card_titles.download.en }}</a>
+        <a href="{{ item.src_url | escape }}">{{ card_titles.source[card_language] | default: card_titles.source.en }}</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
