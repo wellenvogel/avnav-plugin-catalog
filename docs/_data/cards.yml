@@ -7,6 +7,12 @@ author:
 license:
   en: License
   de: Lizenz
+last_updated:
+  en: Last updated
+  de: Zuletzt aktualisiert
+date_format:
+  en: "%b %d, %Y, %I:%M %p %z"
+  de: "%d.%m.%Y, %H:%M %z"
 download:
   en: Download
   de: Herunterladen

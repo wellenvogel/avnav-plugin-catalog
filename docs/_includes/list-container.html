@@ -24,6 +24,12 @@
         <dd data-name="author">{{ item.author }}</dd>
         <dt>{{ card_titles.license[card_language] | default: card_titles.license.en }}</dt>
         <dd data-name="license">{{ item.license }}</dd>
+        {% if item.last_updated and item.last_updated != empty %}
+          {% assign updated_time = item.last_updated | date: "%Y-%m-%dT%H:%M:%S%z" %}
+          {% assign date_format = card_titles.date_format[card_language] | default: card_titles.date_format.en %}
+          <dt>{{ card_titles.last_updated[card_language] | default: card_titles.last_updated.en }}</dt>
+          <dd data-name="last_updated"><time class="plugin-last-updated" datetime="{{ updated_time | escape }}">{{ item.last_updated | date: date_format | escape }}</time></dd>
+        {% endif %}
       </dl>
       <div class="list-item-links">
         <a href="{{ download_url | escape }}">{{ card_titles.download[card_language] | default: card_titles.download.en }}</a>
