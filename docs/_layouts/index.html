@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% assign lc =  page.lang | default: site.lccode %}
-<html lang="{{ data.languages[lc] | default: "en-US" }}">
+<html lang="{{ site.data.languages[lc] | default: "en-US" }}" dummy="{{lc}}">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,9 +21,8 @@
         {% if site.logo %}
           <img src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
-
-        <p class="view"><a href="{{ site.avnav_docbase_de }}">Dokumentation(DE)</a></p>
-        <p class="view"><a href="{{ site.avnav_docbase_en }}">Documentation(EN)</a></p>
+        <p class="view"><a href="{{ site.avnav_docbase_de | append: site.data.doclinks.index.url.de }}">{{ site.data.doclinks.index.title.de }}</a></p>
+        <p class="view"><a href="{{ site.avnav_docbase_en | append: site.data.doclinks.index.url.en }}">{{ site.data.doclinks.index.title.en }}</a></p>
       </header>
       <section>
 

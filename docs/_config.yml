@@ -28,8 +28,8 @@ github_username:  wellenvogel
 repository: wellenvogel/avnav-plugin-catalog
 
 lccode: "en"
-avnav_docbase_de: "https://www.wellenvogel.de/software/avnav/newDoc/latest/index.html"
-avnav_docbase_en: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/index.html"
+avnav_docbase_de: "https://www.wellenvogel.de/software/avnav/newDoc/latest/"
+avnav_docbase_en: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/"
 
 # Build settings
 theme: jekyll-theme-minimal
