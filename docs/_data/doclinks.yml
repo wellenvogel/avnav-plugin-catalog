@@ -1,0 +1,23 @@
+index:
+  url: 
+    de: "index.html"
+    en: "index.html"
+  title: 
+    de: "AvNav Dokumentation(DE)"
+    en: "AvNav Documentation(EN)"
+create: 
+  title:
+    de: 'Erstellen von Plugins'
+    en: 'Creating Plugins'
+  url:
+    de: "special/plugins.html#erstellen-von-plugins"
+    en: "special/plugins.html#creating-plugins"
+install:
+  title:
+    de: 'Installation von Plugins'
+    en: 'Installing Plugins'
+  url:
+    de: "special/plugins.html#installation"
+    en: "special/plugins.html#installation"
+
+test: aha
