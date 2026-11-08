@@ -22,15 +22,16 @@ title: AvNav Plugin Catalog
 email: avnav@wellenvogel.de
 description: >- # this means to ignore newlines until "baseurl:"
   AvNav Plugin Catalog
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/avnav-plugin-catalog" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  wellenvogel
 repository: wellenvogel/avnav-plugin-catalog
 
 # Build settings
 theme: jekyll-theme-minimal
-plugins:
-  - jekyll-feed
+#plugins:
+  #- jekyll-feed
+  #- jekyll-relative-links
 
 # Exclude from processing.
 # The following items will not be processed, by default.
