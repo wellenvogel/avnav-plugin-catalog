@@ -1,0 +1,11 @@
+{
+  "name": "avnav-plugin-catalog-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update": "node update.js"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  }
+}
