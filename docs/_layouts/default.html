@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% assign lc =  page.lang | default: site.lccode %}
+{% assign docbase = "avnav_docbase_" | append: lc  %}
 <html lang="{{ site.data.languages[lc] | default: 'en-US' }}" dummy="{{lc}}">
   <head>
     <meta charset="UTF-8">
@@ -20,12 +21,13 @@
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
 
         {% if site.logo %}
-          <img src="{{site.logo | relative_url}}" alt="Logo" />
+          <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
 
         <p>{{ site.description | default: site.github.project_tagline }}</p>
-        <p class="view"><a href="{{ site.avnav_docbase_de | append: site.data.doclinks.create.url.de }}">{{ site.data.doclinks.create.title.de }}</a></p>
-        <p class="view"><a href="{{ site.avnav_docbase_de | append: site.data.doclinks.install.url.de }}">{{ site.data.doclinks.install.title.de }}</a></p>
+        <p>DOCBASE{{docbase}}</p>
+        <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.create.url[lc] }}">{{ site.data.doclinks.create.title[lc] }}</a></p>
+        <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.install.url[lc] }}">{{ site.data.doclinks.install.title[lc] }}</a></p>
       </header>
       <section>
 

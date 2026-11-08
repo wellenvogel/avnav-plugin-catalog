@@ -24,3 +24,8 @@
     width: auto;
   }
 }
+.logo {
+  width: 64px;
+  max-width: 100%;
+  height: auto;
+}
