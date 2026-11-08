@@ -3,6 +3,9 @@ node_modules/
 npm-debug.log*
 package-lock.json
 
+# Updater marker
+/.update
+
 # Ruby and Bundler
 .bundle/
 Gemfile.local.lock
