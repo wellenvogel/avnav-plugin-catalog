@@ -1,0 +1,43 @@
+name: Update plugin catalog
+
+on:
+  schedule:
+    - cron: "17 21 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-plugin-catalog
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install updater dependencies
+        run: npm install --prefix tools --no-package-lock
+
+      - name: Update plugin catalog
+        run: node tools/update.js docs/_data/plugins.yml .update
+
+      - name: Commit and push changes
+        run: |
+          if [ -f .update ]; then
+            git add -- docs/_data/plugins.yml
+            if ! git diff --cached --quiet -- docs/_data/plugins.yml; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Update plugin catalog" -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+              git push
+            fi
+          fi
