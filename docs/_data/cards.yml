@@ -13,3 +13,9 @@ download:
 source:
   en: Source
   de: Quelle
+search:
+  en: Search plugins
+  de: Plugins suchen
+clear:
+  en: Clear
+  de: Zurücksetzen
