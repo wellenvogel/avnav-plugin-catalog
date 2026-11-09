@@ -1,6 +1,9 @@
 name:
   en: Name
   de: Name
+description:
+  en: Description
+  de: Beschreibung
 platform:
   en: Platform
   de: Plattform
@@ -25,10 +28,10 @@ last_updated:
 date_format:
   en: "%b %d, %Y, %I:%M %p %z"
   de: "%d.%m.%Y, %H:%M %z"
-download:
+download_url:
   en: Download
   de: Herunterladen
-source:
+src_url:
   en: Source
   de: Quelle
 search:

@@ -7,22 +7,172 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 ## The plugin entry and its fields
 
-| Field | Visible | Type/Structure | Description |
-| --- | --- | --- | ---|
-| name | yes | string | the name of the plugin. This must match the name as it is seen in AvNav |
-| description | yes | dict with subkeys for en, de | A short description for the plugin <~80 chars |
-| version | yes | string or number | The plugin version. Either a number like 20260708 or a [semver](https://semver.org/) version string. It must match the version that the plugin reports in plugin.json |
-| author | yes optional | string| A name of the author. |
-| email | yes optional | email address | An email address of the author. Mandatory if no src_url is given or the author cannot be reached via src_url |
-| license | yes optional | string | License abbreviation |
-| src_url | yes optional | url string | URL to the plugin source code. For update `github` this must be the GitHub repository URL |
-| download_url | yes optioonal | url string | A download URL for the plugin if the type is `zip` (mandatory for this type). The URL can contain $version as placeholder. This will be replaced with the `version` string.|
-| platform | yes, texts in _data/platforms.yml| array of strings | The platforms that this plugin can run on. Only values from _data/platforms.yml are valid. Special value: `all`|
-| type | yes | string | Type of plugin. Either `zip` or `package` |
-|last_updated| yes translated to local time | time string | The time the entry was last updated | 
-| update | no | string | Any known update type. Currently: `github`|
+### name
+**label**: en: Name,  de: Name
 
-There can be further fields only necessary/recognized by particular update types. They will normally not be visible.
+**type**: string
+
+**visible**: card: yes, user input: yes
+
+**mandatory**
+
+**short**: The name of the plugin like visible in AvNav.
+
+**description**: This is the plugin name. It is the name being used as directory name on the server. For debian packages (type `package`) the plugin data must be located below /usr/lib/avnav/plugins/*name*. For type `zip` this must be the name of the first directory in the zip file where all the plugin files are contained.
+
+### description
+**label**: en: Description, de: Beschreibung
+
+**type**; dictionary with entries for en and de
+
+**visible**: card: yes (language specific dict entry), user input: both dict entries
+
+**mandatory**: in user input at least one of both must be provided
+
+**short**: Short description of the plugin (max. 80 characters)
+
+**description**: A short description of the plugin functionality.
+
+### version
+**label**: en: Version,  de: Version
+
+**type**: number or SemVer string
+
+**visible**: card: yes, user input: yes
+
+**mandatory**
+
+**short**: The current plugin version.
+
+**description**: Either a number like 20260708 or a [semver](https://semver.org/) version string. It must match the version that the plugin reports in plugin.json.
+
+### author
+**label**: en: Author,  de: Autor
+
+**type**: string
+
+**visible**: card: yes, user input: yes
+
+**mandatory**: no
+
+**short**: The authors name.
+
+**description**: The name of the author. For a GitHub `src_url` this should be the GitHub user name.
+
+### email
+**label**: en: Email,  de: E-Mail
+
+**type**: email
+
+**visible**: card: yes, user input: yes
+
+**mandatory**: Only mandatory if the user cannot be determined from the `src_url`.
+
+**short**: Email address of the author. 
+
+**description**: Email of the author. Mandatory if the author cannot be reached via the src_url (like on GitHub).
+
+### license
+**label**: en: License,  de: Lizenz
+
+**type**: string
+
+**visible**: card yes, user input: yes
+
+**mandatory**: no
+
+**short**: The license abbreviation (like MIT, GPLv2)
+
+**description**: The license of the plugin.
+
+### src_url
+**label**: en: Source,  de: Quelle
+
+**type**: URL
+
+**visible**: card: yes as download, user input: yes
+
+**mandatory**: no
+
+**short**: The plugin source url.
+
+**description**: URL for the source code. For GitHub based plugins this must be the repository URL.
+
+### download_url
+**label**: en: Download,  de: Herunterladen
+
+**type**: URL, cancontain $version
+
+**visible**: card yes as download, user input yes
+
+**mandatory**: yes if plugin type is zip.
+
+**short**: Download URL for the plugin.
+
+**description**: The URL that the plugin can be downloaded from (exactly the version mentioned in version). Can contain $version as placeholder.
+
+### platform
+**label**: en: Platform, de: Plattform
+
+**type**: array of n of the keys from [platforms.yml](../docs/_data/platforms.yml)
+
+**visible**: card yes, use the values from platforms.yml](../docs/_data/platforms.yml), user input: yes (using the keys)
+
+**mandatory**: yes
+
+**short**: The platform the plugin can run on.
+
+**description**: This describes on which of the AvNav platforms the plugin can run on. `all` means all platforms.
+
+### type
+**label**:   en: Type,  de: Typ
+
+**type**: one of `package`or `zip`
+
+**mandatory**: yes
+
+**short**: The type - `package` or `zip`.
+
+**description**: How the plugin is packaged and delivered. `package`: debian package. `zip`: Zip File
+
+### last_updated
+**label**: en: Last updated,  de: Zuletzt aktualisiert
+
+**type**: date string 
+
+**mandatory**: no
+
+**visible**: card: yes, user input: no
+
+**short**: The last time that the plugin entry was updated.
+
+**description**: Date and time of the last update of this plugin in the database.
+
+### update
+**type**: on from the list github,
+
+**mandatory**: no
+
+**visible**: card: no, user input: yes
+
+**short**: Plugin info update mode.
+
+**description**: How the plugin info in the database is updated.
+
+`github`: src_url must point to a GitHub repository. The update expects a release to simply have the version number as name. It will check for new releases and update the `version` entry.
+If a `filename` is provided (can contain $version) the update will look for a file matching the filename in the assets directory and will update `download_url` with the url of this file.
+
+### filename
+**type**: string
+
+**visible**: card : no, user input yes
+
+**mandatory**: no
+
+**short**: Release assets file name.
+
+**description**: if `update`is `github` search for this file in the release assets and replace `download_url` with the URL of this file. The filename can contain $version as placeholder.
+
 
 ## Updates
 
@@ -40,11 +190,14 @@ This command is also run by the daily GitHub action.
 
 The update will consider the `src_url` being a GitHub repository and will determine the latest release. It will consider the release name being the version. If it differs from the current version it will update `version` and `last_updated`. Only valid for type `zip`.
 
-**Additional fields**:
 
-| Name | type | Description |
-| --- | --- | --- |
-| pattern | string | a file name pattern that can contain $version to be replaced with the release name. If there is a file with this pattern in the release assets `download_url` will be replaced with the URL for this file. Pattern must be a .zip file. |
+### Agents
+
+If this file is changed you need to update:
+/docs/_data/cards.yml, 
+/docs/_data/plugin_fields.yml
+
+and the users of those data files
 
 
 

@@ -28,7 +28,7 @@
   <div class="plugin-cards" id="plugin-cards">
   {% for item in site.data.plugins %}
     {% assign download_url = item.download_url | replace: '$version', item.version %}
-    {% assign description = item.description[card_language] | default: item.description.en %}
+    {% assign description = item.description[card_language] | default: item.description.en | default: item.description.de %}
     <div class="list-item" id="plugin-card-{{ forloop.index }}">
       <h2 data-name="name">{{ item.name }}</h2>
       <p data-name="description">{{ description }}</p>
@@ -75,10 +75,10 @@
       </dl>
       {% capture item_links %}
         {% if item.download_url and item.download_url != empty %}
-          <a data-name="download_url" href="{{ download_url | escape }}">{{ card_titles.download[card_language] | default: card_titles.download.en }}</a>
+          <a data-name="download_url" href="{{ download_url | escape }}">{{ card_titles.download_url[card_language] | default: card_titles.download_url.en }}</a>
         {% endif %}
         {% if item.src_url and item.src_url != empty %}
-          <a data-name="src_url" href="{{ item.src_url | escape }}">{{ card_titles.source[card_language] | default: card_titles.source.en }}</a>
+          <a data-name="src_url" href="{{ item.src_url | escape }}">{{ card_titles.src_url[card_language] | default: card_titles.src_url.en }}</a>
         {% endif %}
       {% endcapture %}
       {% assign item_links = item_links | strip %}

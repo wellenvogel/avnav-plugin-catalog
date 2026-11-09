@@ -3,16 +3,16 @@ name:
     en: Required; plugin name in AvNav
     de: Pflicht; Plugin-Name in AvNav
   description:
-    en: Required. The plugin name must match the name shown in AvNav.
-    de: Pflicht. Der Plugin-Name muss dem in AvNav angezeigten Namen entsprechen.
+    en: Required. The plugin name as shown in AvNav is also its directory name on the server. For `package` plugins, the files must be under `/usr/lib/avnav/plugins/<name>`. For `zip` plugins, it must be the name of the top-level directory containing all plugin files in the ZIP archive.
+    de: Pflicht. Der in AvNav angezeigte Plugin-Name ist zugleich der Verzeichnisname auf dem Server. Bei `package`-Plugins müssen die Dateien unter `/usr/lib/avnav/plugins/<name>` liegen. Bei `zip`-Plugins muss er dem Namen des obersten Verzeichnisses entsprechen, das alle Plugin-Dateien im ZIP-Archiv enthält.
   placeholder: "[name]"
 description:
   short:
-    en: Required; short descriptions in English and German
-    de: Pflicht; kurze Beschreibungen auf Englisch und Deutsch
+    en: Required; English and/or German, maximum 80 characters
+    de: Pflicht; Englisch und/oder Deutsch, maximal 80 Zeichen
   description:
-    en: Required. Provide an `en` and a `de` description, each approximately 80 characters or less.
-    de: Pflicht. Je eine Beschreibung unter `en` und `de` angeben, jeweils mit ungefähr höchstens 80 Zeichen.
+    en: Required. Provide a short description of the plugin's functionality in at least one of `en` or `de`, with at most 80 characters per description.
+    de: Pflicht. Eine kurze Beschreibung der Plugin-Funktionalität in mindestens einer der Sprachen `en` oder `de` angeben, mit höchstens 80 Zeichen je Beschreibung.
   placeholder: "en: [English]; de: [Deutsch]"
 version:
   short:
@@ -51,16 +51,16 @@ src_url:
     en: Optional; repository URL for github updates
     de: Optional; Repository-URL für github-Updates
   description:
-    en: Optional. URL of the source code; for `github` updates it must be the GitHub repository URL.
-    de: Optional. URL des Quellcodes; für `github`-Updates muss es die GitHub-Repository-URL sein.
+    en: Optional. URL of the source code; for a GitHub-based plugin it must be the GitHub repository URL.
+    de: Optional. URL des Quellcodes; bei einem GitHub-basierten Plugin muss es die GitHub-Repository-URL sein.
   placeholder: "[URL]"
 author:
   short:
     en: Optional; author name
     de: Optional; Name des Autors
   description:
-    en: Optional. Name of the plugin author.
-    de: Optional. Name des Plugin-Autors.
+    en: Optional. Name of the plugin author; for a GitHub `src_url`, this should be the GitHub username.
+    de: Optional. Name des Plugin-Autors; bei einer GitHub-`src_url` sollte dies der GitHub-Benutzername sein.
   placeholder: "[author]"
 email:
   short:
@@ -72,8 +72,8 @@ email:
   placeholder: "[email]"
 license:
   short:
-    en: Optional; license abbreviation
-    de: Optional; Lizenzkürzel
+    en: Optional; license abbreviation such as MIT or GPLv2
+    de: Optional; Lizenzkürzel wie MIT oder GPLv2
   description:
     en: Optional. An abbreviation identifying the plugin license.
     de: Optional. Eine Abkürzung für die Plugin-Lizenz.
@@ -83,14 +83,14 @@ update:
     en: Optional; github for zip plugins
     de: Optional; github für zip-Plugins
   description:
-    en: Optional. `github` enables release updates from `src_url` and is valid for `zip` plugins only.
-    de: Optional. `github` aktiviert Release-Updates von `src_url` und ist nur für `zip`-Plugins gültig.
+    en: Optional. `github` checks the repository in `src_url` for releases named with the version number and updates `version`. It is valid for `zip` plugins only. If `filename` is provided, a matching release asset also updates `download_url`.
+    de: Optional. `github` prüft das Repository in `src_url` auf Releases mit der Versionsnummer als Namen und aktualisiert `version`. Nur für `zip`-Plugins gültig. Ist `filename` angegeben, aktualisiert ein passendes Release-Asset auch `download_url`.
   placeholder: "[github or blank]"
-pattern:
+filename:
   short:
-    en: Optional for github; ZIP asset filename pattern
-    de: Optional für github; ZIP-Asset-Dateinamenmuster
+    en: Optional for github; release asset filename
+    de: Optional für github; Dateiname des Release-Assets
   description:
-    en: Optional for `github`. ZIP asset filename pattern; `$version` is replaced with the release name. A matching asset updates `download_url`.
-    de: Optional für `github`. ZIP-Asset-Dateinamenmuster; `$version` wird durch den Release-Namen ersetzt. Ein passendes Asset aktualisiert `download_url`.
-  placeholder: "[pattern]"
+    en: Optional for `github`. Search release assets for this filename and set `download_url` to the matching asset URL. The filename may contain `$version` as a placeholder.
+    de: Optional für `github`. In den Release-Assets nach diesem Dateinamen suchen und `download_url` auf die URL des passenden Assets setzen. Der Dateiname kann `$version` als Platzhalter enthalten.
+  placeholder: "[filename]"
