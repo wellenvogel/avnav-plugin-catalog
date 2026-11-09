@@ -1,9 +1,21 @@
+name:
+  en: Name
+  de: Name
+platform:
+  en: Platform
+  de: Plattform
+type:
+  en: Type
+  de: Typ
 version:
   en: Version
   de: Version
 author:
   en: Author
   de: Autor
+email:
+  en: Email
+  de: E-Mail
 license:
   en: License
   de: Lizenz

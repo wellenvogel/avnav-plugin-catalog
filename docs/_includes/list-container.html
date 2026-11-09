@@ -20,10 +20,37 @@
       <dl>
         <dt>{{ card_titles.version[card_language] | default: card_titles.version.en }}</dt>
         <dd data-name="version">{{ item.version }}</dd>
-        <dt>{{ card_titles.author[card_language] | default: card_titles.author.en }}</dt>
-        <dd data-name="author">{{ item.author }}</dd>
-        <dt>{{ card_titles.license[card_language] | default: card_titles.license.en }}</dt>
-        <dd data-name="license">{{ item.license }}</dd>
+        {% if item.author and item.author != empty %}
+          <dt>{{ card_titles.author[card_language] | default: card_titles.author.en }}</dt>
+          <dd data-name="author">{{ item.author }}</dd>
+        {% endif %}
+        {% if item.email and item.email != empty %}
+          <dt>{{ card_titles.email[card_language] | default: card_titles.email.en }}</dt>
+          <dd data-name="email"><a href="mailto:{{ item.email | escape }}">{{ item.email | escape }}</a></dd>
+        {% endif %}
+        {% if item.license and item.license != empty %}
+          <dt>{{ card_titles.license[card_language] | default: card_titles.license.en }}</dt>
+          <dd data-name="license">{{ item.license }}</dd>
+        {% endif %}
+        {%- capture platform_names -%}
+          {%- assign platform_separator = "" -%}
+          {%- for platform in item.platform -%}
+            {%- assign platform_title = site.data.platforms[platform] -%}
+            {%- if platform_title -%}
+              {{- platform_separator -}}{{- platform_title[card_language] | default: platform_title.en | escape -}}
+              {%- assign platform_separator = ", " -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {% assign platform_names = platform_names | strip %}
+        {% if platform_names != empty %}
+          <dt>{{ card_titles.platform[card_language] | default: card_titles.platform.en }}</dt>
+          <dd data-name="platform">{{ platform_names }}</dd>
+        {% endif %}
+        {% if item.type and item.type != empty %}
+          <dt>{{ card_titles.type[card_language] | default: card_titles.type.en }}</dt>
+          <dd data-name="type">{{ item.type | escape }}</dd>
+        {% endif %}
         {% if item.last_updated and item.last_updated != empty %}
           {% assign updated_time = item.last_updated | date: "%Y-%m-%dT%H:%M:%S%z" %}
           {% assign date_format = card_titles.date_format[card_language] | default: card_titles.date_format.en %}
@@ -31,10 +58,18 @@
           <dd data-name="last_updated"><time class="plugin-last-updated" datetime="{{ updated_time | escape }}">{{ item.last_updated | date: date_format | escape }}</time></dd>
         {% endif %}
       </dl>
-      <div class="list-item-links">
-        <a href="{{ download_url | escape }}">{{ card_titles.download[card_language] | default: card_titles.download.en }}</a>
-        <a href="{{ item.src_url | escape }}">{{ card_titles.source[card_language] | default: card_titles.source.en }}</a>
-      </div>
+      {% capture item_links %}
+        {% if item.download_url and item.download_url != empty %}
+          <a data-name="download_url" href="{{ download_url | escape }}">{{ card_titles.download[card_language] | default: card_titles.download.en }}</a>
+        {% endif %}
+        {% if item.src_url and item.src_url != empty %}
+          <a data-name="src_url" href="{{ item.src_url | escape }}">{{ card_titles.source[card_language] | default: card_titles.source.en }}</a>
+        {% endif %}
+      {% endcapture %}
+      {% assign item_links = item_links | strip %}
+      {% if item_links != empty %}
+        <div class="list-item-links">{{ item_links }}</div>
+      {% endif %}
     </div>
   {% endfor %}
   </div>

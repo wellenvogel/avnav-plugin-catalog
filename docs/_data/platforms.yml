@@ -1,0 +1,15 @@
+android:
+  en: Android
+  de: Android
+linux:
+  en: Linux
+  de: Linux
+windows:
+  en: Windows
+  de: Windows
+raspberry:
+  en: Raspberry Pi
+  de: Raspberry Pi
+all:
+  en: All
+  de: Alle
