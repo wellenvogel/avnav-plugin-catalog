@@ -1,0 +1,17 @@
+{% assign field_language = page.lang | default: 'en' %}
+<table>
+  <thead>
+    <tr>
+      <th>{% if field_language == 'de' %}Feld{% else %}Field{% endif %}</th>
+      <th>{% if field_language == 'de' %}Beschreibung{% else %}Description{% endif %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field in site.data.plugin_fields %}
+      <tr>
+        <td><code>{{ field[0] | escape }}</code></td>
+        <td>{{ field[1].description[field_language] | default: field[1].description.en | markdownify }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

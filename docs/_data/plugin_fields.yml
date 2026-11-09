@@ -1,0 +1,96 @@
+name:
+  short:
+    en: Required; plugin name in AvNav
+    de: Pflicht; Plugin-Name in AvNav
+  description:
+    en: Required. The plugin name must match the name shown in AvNav.
+    de: Pflicht. Der Plugin-Name muss dem in AvNav angezeigten Namen entsprechen.
+  placeholder: "[name]"
+description:
+  short:
+    en: Required; short descriptions in English and German
+    de: Pflicht; kurze Beschreibungen auf Englisch und Deutsch
+  description:
+    en: Required. Provide an `en` and a `de` description, each approximately 80 characters or less.
+    de: Pflicht. Je eine Beschreibung unter `en` und `de` angeben, jeweils mit ungefähr höchstens 80 Zeichen.
+  placeholder: "en: [English]; de: [Deutsch]"
+version:
+  short:
+    en: Required; version from plugin.json
+    de: Pflicht; Version aus plugin.json
+  description:
+    en: Required. A number or semantic version string matching the version reported in `plugin.json`.
+    de: Pflicht. Eine Zahl oder eine semantische Versionszeichenkette, die der Version in `plugin.json` entspricht.
+  placeholder: "[version]"
+platform:
+  short:
+    en: "Required; android, linux, windows, raspberry, or all"
+    de: "Pflicht; android, linux, windows, raspberry oder all"
+  description:
+    en: "Required. List supported platforms: `android`, `linux`, `windows`, `raspberry`, or `all`. `all` means every platform."
+    de: "Pflicht. Unterstützte Plattformen angeben: `android`, `linux`, `windows`, `raspberry` oder `all`. `all` steht für alle Plattformen."
+  placeholder: "[platforms]"
+type:
+  short:
+    en: Required; zip or package
+    de: Pflicht; zip oder package
+  description:
+    en: Required. The plugin distribution type is `zip` or `package`.
+    de: Pflicht. Der Verteilungstyp des Plugins ist `zip` oder `package`.
+  placeholder: "[zip/package]"
+download_url:
+  short:
+    en: Required for zip; $version can be used
+    de: Pflicht für zip; $version kann verwendet werden
+  description:
+    en: Required for `zip`. A download URL; `$version` is replaced with the plugin version.
+    de: Pflicht für `zip`. Eine Download-URL; `$version` wird durch die Plugin-Version ersetzt.
+  placeholder: "[URL]"
+src_url:
+  short:
+    en: Optional; repository URL for github updates
+    de: Optional; Repository-URL für github-Updates
+  description:
+    en: Optional. URL of the source code; for `github` updates it must be the GitHub repository URL.
+    de: Optional. URL des Quellcodes; für `github`-Updates muss es die GitHub-Repository-URL sein.
+  placeholder: "[URL]"
+author:
+  short:
+    en: Optional; author name
+    de: Optional; Name des Autors
+  description:
+    en: Optional. Name of the plugin author.
+    de: Optional. Name des Plugin-Autors.
+  placeholder: "[author]"
+email:
+  short:
+    en: Required if the author cannot be reached via src_url
+    de: Pflicht, wenn der Autor über src_url nicht erreichbar ist
+  description:
+    en: Required when `src_url` is missing or the author cannot be contacted through it; otherwise optional.
+    de: Pflicht, wenn `src_url` fehlt oder der Autor darüber nicht erreichbar ist; ansonsten optional.
+  placeholder: "[email]"
+license:
+  short:
+    en: Optional; license abbreviation
+    de: Optional; Lizenzkürzel
+  description:
+    en: Optional. An abbreviation identifying the plugin license.
+    de: Optional. Eine Abkürzung für die Plugin-Lizenz.
+  placeholder: "[license]"
+update:
+  short:
+    en: Optional; github for zip plugins
+    de: Optional; github für zip-Plugins
+  description:
+    en: Optional. `github` enables release updates from `src_url` and is valid for `zip` plugins only.
+    de: Optional. `github` aktiviert Release-Updates von `src_url` und ist nur für `zip`-Plugins gültig.
+  placeholder: "[github or blank]"
+pattern:
+  short:
+    en: Optional for github; ZIP asset filename pattern
+    de: Optional für github; ZIP-Asset-Dateinamenmuster
+  description:
+    en: Optional for `github`. ZIP asset filename pattern; `$version` is replaced with the release name. A matching asset updates `download_url`.
+    de: Optional für `github`. ZIP-Asset-Dateinamenmuster; `$version` wird durch den Release-Namen ersetzt. Ein passendes Asset aktualisiert `download_url`.
+  placeholder: "[pattern]"

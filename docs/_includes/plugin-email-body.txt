@@ -1,0 +1,6 @@
+{% assign field_language = page.lang | default: 'en' %}
+{% if field_language == 'de' %}Bitte ergänzen Sie die Angaben für den Plugin-Katalog:
+{% else %}Please provide the following information for the plugin catalog:
+{% endif %}
+{% for field in site.data.plugin_fields %}{% if field[1].short %}{{ field[0] }} ({{ field[1].short[field_language] | default: field[1].short.en }}): {{ field[1].placeholder }}
+{% endif %}{% endfor %}

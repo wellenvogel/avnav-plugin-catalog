@@ -1,0 +1,20 @@
+{% comment %}
+  Parameter:
+    - subject:  (optional)
+    - text: link text
+    - class: Optional
+    - body
+{% endcomment %}
+
+{% assign email_body = include.body | default: "" %}
+{% assign email_recipient = include.email | default: "avnav@wellenvogel.de" %}
+{% assign email_subject = include.subject | default: "New Plugin" %}
+{% assign link_text = include.text | default: "E-Mail senden" %}
+{% assign css_class = include.class | default: "" %}
+
+{% assign encoded_subject = email_subject | url_encode | replace: "+", "%20" %}
+{% assign encoded_body = email_body | url_encode | replace: "+", "%20" %}
+
+[{{ link_text }}](mailto:{{ email_recipient }}?subject={{ encoded_subject }}&body={{ encoded_body }})
+
+

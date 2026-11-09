@@ -24,7 +24,6 @@
           <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
 
-        <p>{{ site.description | default: site.github.project_tagline }}</p>
         <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.index.url[lc] }}">{{ site.data.doclinks.index.title[lc] }}</a></p>
         <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.create.url[lc] }}">{{ site.data.doclinks.create.title[lc] }}</a></p>
         <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.install.url[lc] }}">{{ site.data.doclinks.install.title[lc] }}</a></p>
