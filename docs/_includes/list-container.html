@@ -10,6 +10,21 @@
       </svg>
     </button>
   </div>
+  <fieldset class="plugin-platform-filter" hidden>
+    <legend>{{ card_titles.platform[card_language] | default: card_titles.platform.en }}</legend>
+    <label>
+      <input type="checkbox" name="platform-filter" value="all" checked>
+      {{ site.data.platforms.all[card_language] | default: site.data.platforms.all.en }}
+    </label>
+    {% for platform in site.data.platforms %}
+      {% if platform[0] != "all" %}
+        <label>
+          <input type="checkbox" name="platform-filter" value="{{ platform[0] | escape }}">
+          {{ platform[1][card_language] | default: platform[1].en | escape }}
+        </label>
+      {% endif %}
+    {% endfor %}
+  </fieldset>
   <div class="plugin-cards" id="plugin-cards">
   {% for item in site.data.plugins %}
     {% assign download_url = item.download_url | replace: '$version', item.version %}
@@ -37,7 +52,7 @@
           {%- for platform in item.platform -%}
             {%- assign platform_title = site.data.platforms[platform] -%}
             {%- if platform_title -%}
-              {{- platform_separator -}}{{- platform_title[card_language] | default: platform_title.en | escape -}}
+              {{- platform_separator -}}<span data-platform="{{ platform | escape }}">{{ platform_title[card_language] | default: platform_title.en | escape }}</span>
               {%- assign platform_separator = ", " -%}
             {%- endif -%}
           {%- endfor -%}

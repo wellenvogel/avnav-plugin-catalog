@@ -4,10 +4,19 @@
   const searchInput = document.getElementById("plugin-search");
   const clearButton = document.getElementById("plugin-search-clear");
   const cards = document.querySelectorAll(".list-item");
+  const platformFilter = document.querySelector(".plugin-platform-filter");
 
-  if (!searchContainer || !searchInput || !clearButton) {
+  if (!searchContainer || !searchInput || !clearButton || !platformFilter) {
     return;
   }
+
+  const platformOptions = Array.from(platformFilter.querySelectorAll('input[name="platform-filter"]'));
+  const allPlatforms = platformOptions.find((option) => option.value === "all");
+  if (!allPlatforms) {
+    console.error("Platform filter is missing its all-platforms option");
+    return;
+  }
+  platformFilter.hidden = false;
 
   const supportsNativeClear = window.CSS?.supports?.(
     "selector(input[type='search']::-webkit-search-cancel-button)"
@@ -18,6 +27,9 @@
 
   const filterCards = () => {
     const query = searchInput.value.trim().toLocaleLowerCase();
+    const selectedPlatforms = platformOptions
+      .filter((option) => option.checked && option !== allPlatforms)
+      .map((option) => option.value);
 
     cards.forEach((card) => {
       const searchableText = searchFields
@@ -25,11 +37,35 @@
         .map((element) => element.textContent || "")
         .join(" ")
         .toLocaleLowerCase();
-      const matches = searchableText.includes(query);
+      const cardPlatforms = Array.from(
+        card.querySelectorAll('[data-name="platform"] [data-platform]'),
+        (element) => element.dataset.platform
+      );
+      const matchesPlatform = allPlatforms.checked || (
+        selectedPlatforms.length > 0 && (
+          cardPlatforms.includes("all") ||
+          selectedPlatforms.some((platform) => cardPlatforms.includes(platform))
+        )
+      );
+      const matches = searchableText.includes(query) && matchesPlatform;
       card.classList.toggle("hidden", !matches);
     });
   };
 
+  platformOptions.forEach((option) => {
+    option.addEventListener("change", () => {
+      if (option === allPlatforms && option.checked) {
+        platformOptions.forEach((other) => {
+          if (other !== allPlatforms) other.checked = false;
+        });
+      } else if (option !== allPlatforms && option.checked) {
+        allPlatforms.checked = false;
+      }
+      filterCards();
+    });
+  });
+
+  filterCards();
   searchInput.addEventListener("input", filterCards);
   clearButton.addEventListener("click", () => {
     searchInput.value = "";

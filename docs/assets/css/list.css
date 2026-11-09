@@ -41,6 +41,19 @@
   fill: currentColor;
 }
 
+.plugin-platform-filter {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.plugin-platform-filter label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-right: 1rem;
+}
+
 .plugin-cards {
   display: flex;
   flex-wrap: wrap;
