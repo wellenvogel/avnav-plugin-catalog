@@ -128,6 +128,21 @@
   file_name: "vectorcharts-$version.zip"
   download_url: "https://github.com/quantenschaum/vectorcharts/releases/download/v20261109/vectorcharts-20261109.zip"
 
+- name: simpledash
+  description:
+    en: Simple dashboard running on E-Book readers
+    de: Einfaches Dashboard für E-Book-Reader
+  version: "20260802"
+  author: wellenvogel
+  license: MIT
+  src_url: "https://github.com/wellenvogel/avnav-simpledashplugin"
+  platform: [all]
+  documentation: "https://github.com/wellenvogel/avnav-simpledashplugin"
+  type: zip
+  download_url: "https://github.com/wellenvogel/avnav-simpledashplugin/releases/download/$version/simpledash-$version.zip"
+  file_name: "simpledash-$version.zip"
+  update: github
+
 - name: font-noto
   description:
     en: Noto fonts for AvNav
@@ -154,3 +169,27 @@
   type: zip
   update: github
   last_updated: 2026-11-08T19:32:57.617Z
+
+- name: documentation
+  description:
+    en: AvNav documentation as plugin
+    de: AvNav Dokumentation als Plugin
+  version: "20261102"
+  author: wellenvogel
+  license: MIT
+  platform: [all]
+  documentation: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugin-list.html#documentation"
+  type: zip
+  download_url: "https://www.wellenvogel.de/software/avnav/downloads/release/20261102/documentation-20261102.zip"
+  
+- name: docvideos
+  description:
+    en: Videos for AvNav documentation
+    de: Videos zur AvNav-Dokumentation
+  version: "20261028"
+  author: wellenvogel
+  license: MIT
+  platform: [all]
+  documentation: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugin-list.html#documentation"
+  type: zip
+  download_url: "https://www.wellenvogel.de/software/avnav/downloads/supplement/docvideos.zip?lang=en"
