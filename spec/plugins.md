@@ -174,6 +174,14 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **description**: Date and time of the last update of this plugin in the database.
 
+To fill missing, null, or empty `last_updated` values with the current UTC time, run from the repository root:
+
+```
+node tools/fill_last_updated.js docs/_data/plugins.yml
+```
+
+Existing non-empty values are preserved. The timestamp records when the field was filled, not necessarily when the plugin was last updated.
+
 ### update
 **type**: on from the list github,
 
@@ -234,5 +242,4 @@ Keep links in descriptions where possible.
 - `visible: user update` means the field appears when requesting a plugin update (email and issue templates).
 
 **translation hints**: keep SemVer in english and german.
-
 
