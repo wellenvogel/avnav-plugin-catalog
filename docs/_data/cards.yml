@@ -35,8 +35,26 @@ src_url:
   en: Source
   de: Quelle
 search:
-  en: Search plugins
-  de: Plugins suchen
+  en: Search
+  de: Suchen
 clear:
   en: Clear
   de: Zurücksetzen
+sort_by:
+  en: Sort
+  de: Sortieren
+sort_version:
+  en: Version
+  de: Version
+sort_name:
+  en: Name
+  de: Name
+sort_last_updated:
+  en: Updated
+  de: Aktualisiert
+sort_ascending:
+  en: Sort ascending
+  de: Aufsteigend sortieren
+sort_descending:
+  en: Sort descending
+  de: Absteigend sortieren

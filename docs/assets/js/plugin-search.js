@@ -5,8 +5,12 @@
   const clearButton = document.getElementById("plugin-search-clear");
   const cards = document.querySelectorAll(".list-item");
   const platformFilter = document.querySelector(".plugin-platform-filter");
+  const cardsContainer = document.getElementById("plugin-cards");
+  const sortBy = document.getElementById("plugin-sort-by");
+  const sortDirection = document.getElementById("plugin-sort-direction");
 
-  if (!searchContainer || !searchInput || !clearButton || !platformFilter) {
+  if (!searchContainer || !searchInput || !clearButton || !platformFilter ||
+      !cardsContainer || !sortBy || !sortDirection) {
     return;
   }
 
@@ -28,6 +32,93 @@
     "selector(input[type='search']::-moz-search-clear)"
   );
   searchContainer.classList.toggle("has-native-clear", Boolean(supportsNativeClear));
+
+  let sortAscending = sortBy.value === "name";
+  const updateSortDirectionControl = () => {
+    const label = sortAscending
+      ? sortDirection.dataset.descendingLabel
+      : sortDirection.dataset.ascendingLabel;
+    sortDirection.textContent = sortAscending ? "↑" : "↓";
+    sortDirection.setAttribute("aria-label", label);
+    sortDirection.title = label;
+  };
+
+  const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+  const parseVersion = (value) => {
+    const match = value.trim().replace(/^[v=]/i, "").match(
+      /^(\d+(?:\.\d+)*)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$/
+    );
+    if (!match) return null;
+    return {
+      core: match[1].split(".").map((part) => part.replace(/^0+(?=\d)/, "")),
+      prerelease: match[2] ? match[2].split(".") : null,
+    };
+  };
+  const compareNumericStrings = (left, right) => {
+    const normalizedLeft = left.replace(/^0+(?=\d)/, "");
+    const normalizedRight = right.replace(/^0+(?=\d)/, "");
+    return normalizedLeft.length - normalizedRight.length ||
+      (normalizedLeft < normalizedRight ? -1 : normalizedLeft > normalizedRight ? 1 : 0);
+  };
+  const compareVersions = (left, right) => {
+    const parsedLeft = parseVersion(left);
+    const parsedRight = parseVersion(right);
+    if (!parsedLeft || !parsedRight) return collator.compare(left, right);
+
+    const coreLength = Math.max(parsedLeft.core.length, parsedRight.core.length);
+    for (let index = 0; index < coreLength; index += 1) {
+      const difference = compareNumericStrings(
+        parsedLeft.core[index] || "0",
+        parsedRight.core[index] || "0"
+      );
+      if (difference) return difference;
+    }
+
+    if (!parsedLeft.prerelease || !parsedRight.prerelease) {
+      return parsedLeft.prerelease ? -1 : parsedRight.prerelease ? 1 : 0;
+    }
+    const prereleaseLength = Math.max(parsedLeft.prerelease.length, parsedRight.prerelease.length);
+    for (let index = 0; index < prereleaseLength; index += 1) {
+      const leftPart = parsedLeft.prerelease[index];
+      const rightPart = parsedRight.prerelease[index];
+      if (leftPart === undefined || rightPart === undefined) {
+        return leftPart === undefined ? -1 : 1;
+      }
+      const leftNumeric = /^\d+$/.test(leftPart);
+      const rightNumeric = /^\d+$/.test(rightPart);
+      if (leftNumeric && rightNumeric) {
+        const difference = compareNumericStrings(leftPart, rightPart);
+        if (difference) return difference;
+      } else if (leftNumeric !== rightNumeric) {
+        return leftNumeric ? -1 : 1;
+      } else {
+        const difference = leftPart < rightPart ? -1 : leftPart > rightPart ? 1 : 0;
+        if (difference) return difference;
+      }
+    }
+    return 0;
+  };
+
+  const sortCards = () => {
+    const sortField = sortBy.value;
+    const direction = sortAscending ? 1 : -1;
+    const sortedCards = Array.from(cards).sort((left, right) => {
+      let comparison;
+      if (sortField === "version") {
+        comparison = compareVersions(left.dataset.sortVersion || "", right.dataset.sortVersion || "");
+      } else if (sortField === "name") {
+        comparison = collator.compare(left.dataset.sortName || "", right.dataset.sortName || "");
+      } else {
+        const leftDate = Date.parse(left.dataset.sortLastUpdated || "");
+        const rightDate = Date.parse(right.dataset.sortLastUpdated || "");
+        comparison = Number.isNaN(leftDate) || Number.isNaN(rightDate)
+          ? collator.compare(left.dataset.sortLastUpdated || "", right.dataset.sortLastUpdated || "")
+          : leftDate - rightDate;
+      }
+      return comparison * direction;
+    });
+    sortedCards.forEach((card) => cardsContainer.appendChild(card));
+  };
 
   const filterCards = () => {
     const query = searchInput.value.trim().toLocaleLowerCase();
@@ -67,6 +158,18 @@
     });
   });
 
+  sortBy.addEventListener("change", () => {
+    sortAscending = sortBy.value === "name";
+    updateSortDirectionControl();
+    sortCards();
+  });
+  sortDirection.addEventListener("click", () => {
+    sortAscending = !sortAscending;
+    updateSortDirectionControl();
+    sortCards();
+  });
+  updateSortDirectionControl();
+  sortCards();
   filterCards();
   searchInput.addEventListener("input", filterCards);
   clearButton.addEventListener("click", () => {

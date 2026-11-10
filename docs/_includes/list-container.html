@@ -1,17 +1,32 @@
 <div class="list-container">
   {% assign card_language = page.lang | default: 'en' %}
   {% assign card_titles = site.data.cards %}
-  <div class="plugin-search" role="search">
-    <label for="plugin-search">{{ card_titles.search[card_language] | default: card_titles.search.en }}</label>
-    <input id="plugin-search" type="search" aria-controls="plugin-cards">
-    <button id="plugin-search-clear" class="plugin-search-clear" type="button" aria-label="{{ card_titles.clear[card_language] | default: card_titles.clear.en }}" title="{{ card_titles.clear[card_language] | default: card_titles.clear.en }}">
-      <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16">
-        <path d="M3.3 3.3a.75.75 0 0 1 1.06 0L8 6.94l3.64-3.64a.75.75 0 1 1 1.06 1.06L9.06 8l3.64 3.64a.75.75 0 1 1-1.06 1.06L8 9.06l-3.64 3.64a.75.75 0 1 1-1.06-1.06L6.94 8 3.3 4.36a.75.75 0 0 1 0-1.06Z"></path>
-      </svg>
-    </button>
+  <div class="plugin-list-controls">
+    <div class="plugin-search" role="search">
+      <label for="plugin-search">{{ card_titles.search[card_language] | default: card_titles.search.en }}</label>
+      <input id="plugin-search" type="search" aria-controls="plugin-cards">
+      <button id="plugin-search-clear" class="plugin-search-clear" type="button" aria-label="{{ card_titles.clear[card_language] | default: card_titles.clear.en }}" title="{{ card_titles.clear[card_language] | default: card_titles.clear.en }}">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16">
+          <path d="M3.3 3.3a.75.75 0 0 1 1.06 0L8 6.94l3.64-3.64a.75.75 0 1 1 1.06 1.06L9.06 8l3.64 3.64a.75.75 0 1 1-1.06 1.06L8 9.06l-3.64 3.64a.75.75 0 1 1-1.06-1.06L6.94 8 3.3 4.36a.75.75 0 0 1 0-1.06Z"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="plugin-sort">
+      <label for="plugin-sort-by">{{ card_titles.sort_by[card_language] | default: card_titles.sort_by.en }}</label>
+      <select id="plugin-sort-by">
+        <option value="version">{{ card_titles.sort_version[card_language] | default: card_titles.sort_version.en }}</option>
+        <option value="name">{{ card_titles.sort_name[card_language] | default: card_titles.sort_name.en }}</option>
+        <option value="last_updated">{{ card_titles.sort_last_updated[card_language] | default: card_titles.sort_last_updated.en }}</option>
+      </select>
+      <button id="plugin-sort-direction"
+        type="button"
+        data-ascending-label="{{ card_titles.sort_ascending[card_language] | default: card_titles.sort_ascending.en | escape }}"
+        data-descending-label="{{ card_titles.sort_descending[card_language] | default: card_titles.sort_descending.en | escape }}"
+        aria-label="{{ card_titles.sort_descending[card_language] | default: card_titles.sort_descending.en | escape }}"
+        title="{{ card_titles.sort_descending[card_language] | default: card_titles.sort_descending.en | escape }}">↓</button>
+    </div>
   </div>
-  <fieldset class="plugin-platform-filter" hidden>
-    <legend>{{ card_titles.platform[card_language] | default: card_titles.platform.en }}</legend>
+  <fieldset class="plugin-platform-filter" aria-label="{{ card_titles.platform[card_language] | default: card_titles.platform.en }}" hidden>
     <label>
       <input type="checkbox" name="platform-filter" value="all" checked>
       {{ site.data.platforms.all[card_language] | default: site.data.platforms.all.en }}
@@ -29,7 +44,14 @@
   {% for item in site.data.plugins %}
     {% assign download_url = item.download_url | replace: '$version', item.version %}
     {% assign description = item.description[card_language] | default: item.description.en | default: item.description.de %}
-    <div class="list-item" id="plugin-card-{{ forloop.index }}">
+    {% assign updated_time = "" %}
+    {% if item.last_updated and item.last_updated != empty %}
+      {% assign updated_time = item.last_updated | date: "%Y-%m-%dT%H:%M:%S%z" %}
+    {% endif %}
+    <div class="list-item" id="plugin-card-{{ forloop.index }}"
+      data-sort-name="{{ item.name | escape }}"
+      data-sort-version="{{ item.version | escape }}"
+      data-sort-last-updated="{{ updated_time | default: '' | escape }}">
       <h2 data-name="name">{{ item.name }}</h2>
       <p data-name="description">{{ description }}</p>
       <dl>
@@ -67,7 +89,6 @@
           <dd data-name="type">{{ item.type | escape }}</dd>
         {% endif %}
         {% if item.last_updated and item.last_updated != empty %}
-          {% assign updated_time = item.last_updated | date: "%Y-%m-%dT%H:%M:%S%z" %}
           {% assign date_format = card_titles.date_format[card_language] | default: card_titles.date_format.en %}
           <dt>{{ card_titles.last_updated[card_language] | default: card_titles.last_updated.en }}</dt>
           <dd data-name="last_updated"><time class="plugin-last-updated" datetime="{{ updated_time | escape }}">{{ item.last_updated | date: date_format | escape }}</time></dd>
