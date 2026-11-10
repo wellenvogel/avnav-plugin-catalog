@@ -193,3 +193,64 @@
   documentation: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugin-list.html#documentation"
   type: zip
   download_url: "https://www.wellenvogel.de/software/avnav/downloads/supplement/docvideos.zip?lang=en"
+
+- name: seatalk-remote
+  description:
+    en: Seatalk remote control plugin
+    de: Seatalk-Fernsteuerungs-Plugin
+  version: "20250319"
+  author: wellenvogel
+  license: MIT
+  platform: [raspberry,linux]
+  src_url: "https://github.com/wellenvogel/avnav-seatalk-remote-plugin"
+  documentation: "https://github.com/wellenvogel/avnav-seatalk-remote-plugin"
+  type: package
+  download_url: "https://github.com/wellenvogel/avnav-seatalk-remote-plugin/releases/download/20250319/avnav-seatalk-remote-plugin_20250319_all.deb"
+  update: github
+  file_name: "avnav-seatalk-remote-plugin_$version_all.deb"
+
+- name: Sail_Instrument
+  description:
+    en: Sail Instrument plugin
+    de: Sail Instrument Plugin
+  version: "20260621"
+  author: kdschmidt1
+  license: MIT
+  platform: [raspberry,linux]
+  src_url: "https://github.com/kdschmidt1/Sail_Instrument"
+  documentation: "https://github.com/kdschmidt1/Sail_Instrument"
+  type: package
+  download_url: "https://github.com/kdschmidt1/Sail_Instrument/releases/download/20260621/avnav-sail-instrument-plugin_20260621_all.deb"
+  update: github
+  file_name: "avnav-sail-instrument-plugin_$version_all.deb"
+  min_version: "20260616"
+
+- name: chremote
+  description:
+    en: Plugin for an I2C remote control
+    de: Plugin für eine I2C-Fernbedienung
+  version: "20250312"
+  author: wellenvogel
+  license: MIT
+  platform: [raspberry,linux]
+  src_url: "https://github.com/wellenvogel/avnav-obp-rc-remote-plugin"
+  documentation: "https://github.com/wellenvogel/avnav-obp-rc-remote-plugin"
+  type: package
+  download_url: "https://github.com/wellenvogel/avnav-obp-rc-remote-plugin/releases/download/$version/avnav-obp-rc-remote-plugin_$version_all.deb"
+  update: github
+  file_name: "avnav-obp-rc-remote-plugin_$version_all.deb"
+
+- name: obp-plotterv3
+  description:
+    en: Setup for OBP Plotter V3 
+    de: Einrichtung für OBP Plotter V3
+  version: "20250317"
+  author: wellenvogel
+  license: MIT
+  platform: [raspberry,linux]
+  src_url: "https://github.com/wellenvogel/avnav-obp-plotterv3-plugin"
+  documentation: "https://github.com/wellenvogel/avnav-obp-plotterv3-plugin"
+  type: package
+  download_url: "https://github.com/wellenvogel/avnav-obp-plotterv3-plugin/releases/download/$version/avnav-obp-plotterv3-plugin_$version_all.deb"
+  update: github
+  file_name: "avnav-obp-plotterv3-plugin_$version_all.deb"
