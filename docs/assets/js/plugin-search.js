@@ -12,11 +12,15 @@
 
   const platformOptions = Array.from(platformFilter.querySelectorAll('input[name="platform-filter"]'));
   const allPlatforms = platformOptions.find((option) => option.value === "all");
+  const individualPlatforms = platformOptions.filter((option) => option !== allPlatforms);
   if (!allPlatforms) {
     console.error("Platform filter is missing its all-platforms option");
     return;
   }
   platformFilter.hidden = false;
+  individualPlatforms.forEach((option) => {
+    option.checked = allPlatforms.checked;
+  });
 
   const supportsNativeClear = window.CSS?.supports?.(
     "selector(input[type='search']::-webkit-search-cancel-button)"
@@ -41,11 +45,9 @@
         card.querySelectorAll('[data-name="platform"] [data-platform]'),
         (element) => element.dataset.platform
       );
-      const matchesPlatform = allPlatforms.checked || (
-        selectedPlatforms.length > 0 && (
-          cardPlatforms.includes("all") ||
-          selectedPlatforms.some((platform) => cardPlatforms.includes(platform))
-        )
+      const matchesPlatform = selectedPlatforms.length > 0 && (
+        cardPlatforms.includes("all") ||
+        selectedPlatforms.some((platform) => cardPlatforms.includes(platform))
       );
       const matches = searchableText.includes(query) && matchesPlatform;
       card.classList.toggle("hidden", !matches);
@@ -54,12 +56,12 @@
 
   platformOptions.forEach((option) => {
     option.addEventListener("change", () => {
-      if (option === allPlatforms && option.checked) {
-        platformOptions.forEach((other) => {
-          if (other !== allPlatforms) other.checked = false;
+      if (option === allPlatforms) {
+        individualPlatforms.forEach((platform) => {
+          platform.checked = allPlatforms.checked;
         });
-      } else if (option !== allPlatforms && option.checked) {
-        allPlatforms.checked = false;
+      } else {
+        allPlatforms.checked = individualPlatforms.every((platform) => platform.checked);
       }
       filterCards();
     });
