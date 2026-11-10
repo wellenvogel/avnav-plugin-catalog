@@ -2,6 +2,7 @@
 name: UpdatePlugin
 about: Request updating a plugin in the AvNav plugin catalog
 title: "[Plugin] Update "
+labels: update plugin
 ---
 
 Please update the following information in the plugin catalog:

@@ -2,6 +2,7 @@
 name: AddPlugin
 about: Request adding a plugin to the AvNav plugin catalog
 title: "[Plugin] Add "
+labels: new plugin
 ---
 
 Please provide the following information for the plugin catalog:
