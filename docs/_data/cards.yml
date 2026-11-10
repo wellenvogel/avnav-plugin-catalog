@@ -16,6 +16,9 @@ platform_filter_help:
 type:
   en: Type
   de: Typ
+type_both:
+  en: Both
+  de: Beide
 version:
   en: Version
   de: Version

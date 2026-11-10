@@ -5,16 +5,18 @@
   const clearButton = document.getElementById("plugin-search-clear");
   const cards = document.querySelectorAll(".list-item");
   const platformFilter = document.querySelector(".plugin-platform-filter");
+  const typeFilter = document.querySelector(".plugin-type-filter");
   const cardsContainer = document.getElementById("plugin-cards");
   const sortBy = document.getElementById("plugin-sort-by");
   const sortDirection = document.getElementById("plugin-sort-direction");
 
-  if (!searchContainer || !searchInput || !clearButton || !platformFilter ||
+  if (!searchContainer || !searchInput || !clearButton || !platformFilter || !typeFilter ||
       !cardsContainer || !sortBy || !sortDirection) {
     return;
   }
 
   const platformOptions = Array.from(platformFilter.querySelectorAll('input[name="platform-filter"]'));
+  const typeOptions = Array.from(typeFilter.querySelectorAll('input[name="type-filter"]'));
   const allPlatforms = platformOptions.find((option) => option.value === "all");
   const individualPlatforms = platformOptions.filter((option) => option !== allPlatforms);
   if (!allPlatforms) {
@@ -22,6 +24,7 @@
     return;
   }
   platformFilter.hidden = false;
+  typeFilter.hidden = false;
   allPlatforms.checked = individualPlatforms.length > 0 &&
     individualPlatforms.every((option) => option.checked);
 
@@ -124,6 +127,7 @@
     const selectedPlatforms = platformOptions
       .filter((option) => option.checked && option !== allPlatforms)
       .map((option) => option.value);
+    const selectedType = typeOptions.find((option) => option.checked)?.value;
 
     cards.forEach((card) => {
       const searchableText = searchFields
@@ -139,7 +143,9 @@
         cardPlatforms.includes("all") ||
         selectedPlatforms.every((platform) => cardPlatforms.includes(platform))
       );
-      const matches = searchableText.includes(query) && matchesPlatform;
+      const matchesType = selectedType !== undefined &&
+        (selectedType === "both" || selectedType === card.dataset.type);
+      const matches = searchableText.includes(query) && matchesPlatform && matchesType;
       card.classList.toggle("hidden", !matches);
     });
   };
@@ -155,6 +161,9 @@
       }
       filterCards();
     });
+  });
+  typeOptions.forEach((option) => {
+    option.addEventListener("change", filterCards);
   });
 
   sortBy.addEventListener("change", () => {

@@ -87,13 +87,21 @@
   cursor: pointer;
 }
 
-.plugin-platform-filter {
+.plugin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.plugin-platform-filter,
+.plugin-type-filter {
   border: 0;
   margin: 0;
   padding: 0;
 }
 
-.plugin-platform-filter legend {
+.plugin-platform-filter legend,
+.plugin-type-filter legend {
   padding: 0;
 }
 
@@ -109,14 +117,16 @@
   border: 0;
 }
 
-.plugin-platform-options {
+.plugin-platform-options,
+.plugin-type-options {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.1rem 0.5rem;
 }
 
-.plugin-platform-filter label {
+.plugin-platform-filter label,
+.plugin-type-filter label {
   display: inline-flex;
   align-items: center;
   gap: 0.15rem;

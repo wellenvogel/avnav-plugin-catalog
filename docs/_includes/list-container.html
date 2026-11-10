@@ -26,6 +26,7 @@
         title="{{ card_titles.sort_descending[card_language] | default: card_titles.sort_descending.en | escape }}">↓</button>
     </div>
   </div>
+  <div class="plugin-filters">
   {% assign platform_filter_help = card_titles.platform_filter_help[card_language] | default: card_titles.platform_filter_help.en %}
   <fieldset class="plugin-platform-filter" title="{{ platform_filter_help | escape }}" aria-describedby="plugin-platform-help" hidden>
     <legend>{{ card_titles.platform_filter[card_language] | default: card_titles.platform_filter.en | escape }}</legend>
@@ -38,13 +39,22 @@
       {% for platform in site.data.platforms %}
         {% if platform[0] != "all" %}
           <label>
-            <input type="checkbox" name="platform-filter" value="{{ platform[0] | escape }}"{% if platform[0] == "linux" or platform[0] == "raspberry" %} checked{% endif %}>
+            <input type="checkbox" name="platform-filter" value="{{ platform[0] | escape }}"{% if platform[0] == "raspberry" %} checked{% endif %}>
             {{ platform[1][card_language] | default: platform[1].en | escape }}
           </label>
         {% endif %}
       {% endfor %}
     </div>
   </fieldset>
+  <fieldset class="plugin-type-filter" hidden>
+    <legend>{{ card_titles.type[card_language] | default: card_titles.type.en | escape }}</legend>
+    <div class="plugin-type-options">
+      <label><input type="radio" name="type-filter" value="both" checked> {{ card_titles.type_both[card_language] | default: card_titles.type_both.en | escape }}</label>
+      <label><input type="radio" name="type-filter" value="zip"> ZIP</label>
+      <label><input type="radio" name="type-filter" value="package"> package</label>
+    </div>
+  </fieldset>
+  </div>
   <div class="plugin-cards" id="plugin-cards">
   {% for item in site.data.plugins %}
     {% assign download_url = item.download_url | replace: '$version', item.version %}
@@ -54,6 +64,7 @@
       {% assign updated_time = item.last_updated | date: "%Y-%m-%dT%H:%M:%S%z" %}
     {% endif %}
     <div class="list-item" id="plugin-card-{{ forloop.index }}"
+      data-type="{{ item.type | escape }}"
       data-sort-name="{{ item.name | escape }}"
       data-sort-version="{{ item.version | escape }}"
       data-sort-last-updated="{{ updated_time | default: '' | escape }}">
