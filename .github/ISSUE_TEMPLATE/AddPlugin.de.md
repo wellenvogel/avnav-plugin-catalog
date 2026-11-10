@@ -19,7 +19,7 @@ Bitte ergänze die folgenden Angaben für den Plugin-Katalog:
 **platform** (Pflicht. Unterstützte Plattformen angeben: `android`, `linux`, `windows`, `raspberry` oder `all`. `all` steht für alle Plattformen.):
 >
 
-**type** (Pflicht. Der Verteilungstyp des Plugins ist `zip` oder `package`.):
+**type** (Pflicht. Der Verteilungstyp des Plugins ist `zip` oder `package`. Debian-`package`-Plugins werden zu [System-Plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/special/plugins.html#debian-pakete); `zip`-Plugins werden zu [Benutzer-Plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/special/plugins.html#zip-datei).):
 >
 
 **download_url** (Pflicht für `zip`. Eine Download-URL; `$version` wird durch die Plugin-Version ersetzt.):

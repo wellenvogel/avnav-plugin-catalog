@@ -159,7 +159,7 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **short**: The type - `package` or `zip`.
 
-**description**: How the plugin is packaged and delivered. `package`: debian package. `zip`: Zip File
+**description**: How the plugin is packaged and delivered. `package`: debian package. `zip`: Zip File. Plugins of type `package` will become [system-plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#debian-packages), plugins of type `zip`will become [user-plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#zip-file).
 
 ### last_updated
 **label**: en: Last updated,  de: Zuletzt aktualisiert

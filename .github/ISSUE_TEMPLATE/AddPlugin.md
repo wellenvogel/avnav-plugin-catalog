@@ -19,7 +19,7 @@ Please provide the following information for the plugin catalog:
 **platform** (Required. List supported platforms: `android`, `linux`, `windows`, `raspberry`, or `all`. `all` means every platform.):
 >
 
-**type** (Required. The plugin distribution type is `zip` or `package`.):
+**type** (Required. The plugin distribution type is `zip` or `package`. Debian `package` plugins become [system plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#debian-packages); `zip` plugins become [user plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#zip-file).):
 >
 
 **download_url** (Required for `zip`. A download URL; `$version` is replaced with the plugin version.):

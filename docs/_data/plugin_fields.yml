@@ -35,8 +35,8 @@ type:
     en: Required; zip or package
     de: Pflicht; zip oder package
   description:
-    en: Required. The plugin distribution type is `zip` or `package`.
-    de: Pflicht. Der Verteilungstyp des Plugins ist `zip` oder `package`.
+    en: Required. The plugin distribution type is `zip` or `package`. Debian `package` plugins become [system plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#debian-packages); `zip` plugins become [user plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugins.html#zip-file).
+    de: Pflicht. Der Verteilungstyp des Plugins ist `zip` oder `package`. Debian-`package`-Plugins werden zu [System-Plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/special/plugins.html#debian-pakete); `zip`-Plugins werden zu [Benutzer-Plugins](https://www.wellenvogel.de/software/avnav/newDoc/latest/special/plugins.html#zip-datei).
   placeholder: "[zip/package]"
 download_url:
   short:
