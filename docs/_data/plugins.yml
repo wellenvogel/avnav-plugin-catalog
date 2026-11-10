@@ -93,12 +93,40 @@
     de: Dynamische Instrumente Plugin für AvNav
   version: "v3.9.1"
   author: metzger100
-  license: MIT
+  license: MIT?
   src_url: "https://github.com/metzger100/dyninstruments"
   platform: [all]
   documentation: "https://github.com/metzger100/dyninstruments"
   type: zip
   download_url: "https://github.com/metzger100/dyninstruments/releases/download/v3.9.1/dyninstruments-3.9.1.zip"
+
+- name: logbuch
+  description:
+    en: Logb plugin for AvNav
+    de: Logbuch Plugin für AvNav
+  version: "2.1.0"
+  author: Surfer2010
+  license: GPLv3
+  src_url: "https://github.com/Surfer2010/avnav-logbuch-plugin"
+  platform: [linux, raspberry]
+  documentation: "https://github.com/Surfer2010/avnav-logbuch-plugin/"
+  type: zip
+  download_url: "https://github.com/Surfer2010/avnav-logbuch-plugin/releases/download/v2.1.0/avnav-logbuch-plugin-2.1.0.zip"
+
+- name: vectorcharts
+  description:
+    en: Access online and offline vector charts
+    de: Zugriff auf Online- und Offline-Vektorkarten
+  version: "20261109"
+  author: quantenschaum
+  license: MIT
+  src_url: "https://github.com/quantenschaum/vectorcharts"
+  platform: [all]
+  documentation: "https://github.com/quantenschaum/vectorcharts"
+  type: zip
+  update: github
+  file_name: "vectorcharts-$version.zip"
+  download_url: "https://github.com/quantenschaum/vectorcharts/releases/download/v20261109/vectorcharts-20261109.zip"
 
 - name: font-noto
   description:
