@@ -23,6 +23,13 @@
     position: static;
     width: auto;
   }
+
+  .logo {
+    display: none;
+  }
+  #avnav-plugins{
+    display: none;
+  }
 }
 .logo {
   width: 64px;

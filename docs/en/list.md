@@ -1,6 +1,9 @@
 ---
     layout: list
     lang: en
+    addlink:
+      url: developer.html
+      title: 'For developers'
 ---
 
 # AvNav plugins

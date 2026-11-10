@@ -23,10 +23,6 @@
         {% if site.logo %}
           <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
-
-        <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.index.url[lc] }}">{{ site.data.doclinks.index.title[lc] }}</a></p>
-        <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.create.url[lc] }}">{{ site.data.doclinks.create.title[lc] }}</a></p>
-        <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.install.url[lc] }}">{{ site.data.doclinks.install.title[lc] }}</a></p>
       </header>
       <section>
 
@@ -35,9 +31,17 @@
       </section>
       <footer>
         <p class="small">Update: {{ "now" | date: "%Y-%m-%d %H:%M" }}.</p>
+        <nav class="page-links" aria-label="Page links">
+          {% if page.addlink %}
+          <p class="view"><a href="{{ page.addlink.url }}">{{ page.addlink.title }}</a></p>
+          {% endif %}
+          <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.index.url[lc] }}">{{ site.data.doclinks.index.title[lc] }}</a></p>
+          <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.create.url[lc] }}">{{ site.data.doclinks.create.title[lc] }}</a></p>
+          <p class="view"><a href="{{ site[docbase] | append: site.data.doclinks.install.url[lc] }}">{{ site.data.doclinks.install.title[lc] }}</a></p>
         {% if site.github.is_project_page %}
-        <p class="view"><a href="{{ site.github.repository_url }}">Source GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
+          <p class="view"><a href="{{ site.github.repository_url }}">Source GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
         {% endif %}      
+        </nav>
       </footer>
     </div>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>

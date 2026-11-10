@@ -22,8 +22,6 @@
         {% if site.logo %}
           <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
-        <p class="view"><a href="{{ site.avnav_docbase_de | append: site.data.doclinks.index.url.de }}">{{ site.data.doclinks.index.title.de }}</a></p>
-        <p class="view"><a href="{{ site.avnav_docbase_en | append: site.data.doclinks.index.url.en }}">{{ site.data.doclinks.index.title.en }}</a></p>
       </header>
       <section>
 
@@ -31,9 +29,13 @@
 
       </section>
       <footer>
-        {% if site.github.is_project_page %}
-        <p class="view"><a href="{{ site.github.repository_url }}">Source GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
-        {% endif %}      
+        <nav class="page-links" aria-label="Page links">
+          <p class="view"><a href="{{ site.avnav_docbase_de | append: site.data.doclinks.index.url.de }}">{{ site.data.doclinks.index.title.de }}</a></p>
+          <p class="view"><a href="{{ site.avnav_docbase_en | append: site.data.doclinks.index.url.en }}">{{ site.data.doclinks.index.title.en }}</a></p>
+          {% if site.github.is_project_page %}
+          <p class="view"><a href="{{ site.github.repository_url }}">Source GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
+          {% endif %}
+        </nav>
       </footer>
     </div>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>

@@ -1,6 +1,9 @@
 ---
   layout: default
   lang: de
+  addlink:
+    url: list.html
+    title: 'Zum Katalog'
 ---
 
 # Hinweise für Plugin Entwickler

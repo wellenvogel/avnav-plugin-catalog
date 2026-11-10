@@ -1,6 +1,9 @@
 ---
   layout: default
   lang: en
+  addlink:
+    url: list.html
+    title: 'Catalog'
 ---
 # Notes for plugin developers
 
