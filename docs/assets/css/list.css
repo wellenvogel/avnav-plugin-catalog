@@ -88,17 +88,32 @@
 }
 
 .plugin-platform-filter {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   border: 0;
   margin: 0;
   padding: 0;
-  gap: 0.1rem 0.5rem;
 }
 
-.plugin-platform-filter[hidden] {
-  display: none;
+.plugin-platform-filter legend {
+  padding: 0;
+}
+
+.plugin-platform-help {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.plugin-platform-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.1rem 0.5rem;
 }
 
 .plugin-platform-filter label {

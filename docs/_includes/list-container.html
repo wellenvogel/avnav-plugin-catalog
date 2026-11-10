@@ -26,19 +26,24 @@
         title="{{ card_titles.sort_descending[card_language] | default: card_titles.sort_descending.en | escape }}">↓</button>
     </div>
   </div>
-  <fieldset class="plugin-platform-filter" aria-label="{{ card_titles.platform[card_language] | default: card_titles.platform.en }}" hidden>
-    <label>
-      <input type="checkbox" name="platform-filter" value="all" checked>
-      {{ site.data.platforms.all[card_language] | default: site.data.platforms.all.en }}
-    </label>
-    {% for platform in site.data.platforms %}
-      {% if platform[0] != "all" %}
-        <label>
-          <input type="checkbox" name="platform-filter" value="{{ platform[0] | escape }}">
-          {{ platform[1][card_language] | default: platform[1].en | escape }}
-        </label>
-      {% endif %}
-    {% endfor %}
+  {% assign platform_filter_help = card_titles.platform_filter_help[card_language] | default: card_titles.platform_filter_help.en %}
+  <fieldset class="plugin-platform-filter" title="{{ platform_filter_help | escape }}" aria-describedby="plugin-platform-help" hidden>
+    <legend>{{ card_titles.platform_filter[card_language] | default: card_titles.platform_filter.en | escape }}</legend>
+    <span id="plugin-platform-help" class="plugin-platform-help">{{ platform_filter_help | escape }}</span>
+    <div class="plugin-platform-options">
+      <label>
+        <input type="checkbox" name="platform-filter" value="all">
+        {{ site.data.platforms.all[card_language] | default: site.data.platforms.all.en }}
+      </label>
+      {% for platform in site.data.platforms %}
+        {% if platform[0] != "all" %}
+          <label>
+            <input type="checkbox" name="platform-filter" value="{{ platform[0] | escape }}"{% if platform[0] == "linux" or platform[0] == "raspberry" %} checked{% endif %}>
+            {{ platform[1][card_language] | default: platform[1].en | escape }}
+          </label>
+        {% endif %}
+      {% endfor %}
+    </div>
   </fieldset>
   <div class="plugin-cards" id="plugin-cards">
   {% for item in site.data.plugins %}

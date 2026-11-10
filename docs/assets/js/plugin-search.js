@@ -22,9 +22,8 @@
     return;
   }
   platformFilter.hidden = false;
-  individualPlatforms.forEach((option) => {
-    option.checked = allPlatforms.checked;
-  });
+  allPlatforms.checked = individualPlatforms.length > 0 &&
+    individualPlatforms.every((option) => option.checked);
 
   const supportsNativeClear = window.CSS?.supports?.(
     "selector(input[type='search']::-webkit-search-cancel-button)"
@@ -138,7 +137,7 @@
       );
       const matchesPlatform = selectedPlatforms.length > 0 && (
         cardPlatforms.includes("all") ||
-        selectedPlatforms.some((platform) => cardPlatforms.includes(platform))
+        selectedPlatforms.every((platform) => cardPlatforms.includes(platform))
       );
       const matches = searchableText.includes(query) && matchesPlatform;
       card.classList.toggle("hidden", !matches);

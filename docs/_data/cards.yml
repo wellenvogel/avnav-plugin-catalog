@@ -7,6 +7,12 @@ description:
 platform:
   en: Platform
   de: Plattform
+platform_filter:
+  en: Must support
+  de: Verfügbar für
+platform_filter_help:
+  en: Plugins must support every selected platform. Linux and Raspberry Pi are selected by default. Select at least one platform to see results.
+  de: Plugins müssen alle ausgewählten Plattformen unterstützen. Linux und Raspberry Pi sind standardmäßig ausgewählt. Für Ergebnisse muss mindestens eine Plattform ausgewählt sein.
 type:
   en: Type
   de: Typ
