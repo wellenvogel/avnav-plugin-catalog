@@ -19,8 +19,8 @@ version:
     en: Required; version from plugin.json
     de: Pflicht; Version aus plugin.json
   description:
-    en: Required. A number or semantic version string matching the version reported in `plugin.json`.
-    de: Pflicht. Eine Zahl oder eine semantische Versionszeichenkette, die der Version in `plugin.json` entspricht.
+    en: Required. A number or [SemVer](https://semver.org/) version string matching the version reported in `plugin.json`.
+    de: Pflicht. Eine Zahl oder eine [SemVer](https://semver.org/)-Versionszeichenkette, die der Version in `plugin.json` entspricht.
   placeholder: "[version]"
 platform:
   short:

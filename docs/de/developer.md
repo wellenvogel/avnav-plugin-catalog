@@ -21,13 +21,13 @@ Damit ein Plugin in diese Liste aufgenommen werden kann, müssen die folgenden B
 
 3. Das Plugin muss die Datenschutz-Regeln einhalten. Es darf insbesondere nicht ohne Zustimmung des Nutzers Daten online speichern.
 
-## Eintrag in die Liste
+## Eintrag eines neuen Plugins
 
 Die folgenden Felder beschreiben die für einen Katalogeintrag benötigten Informationen:
 
 {% include plugin-fields-table.html %}
 
-Die Informationen können per E-Mail gesendet werden; alternativ kann in diesem Repository ein [Issue](#TODO) geöffnet werden.
+Die Informationen können per E-Mail an
 
 {% capture email_body %}{% include plugin-email-body.txt %}{% endcapture %}
 {% include mailto.html
@@ -35,3 +35,23 @@ Die Informationen können per E-Mail gesendet werden; alternativ kann in diesem 
     text="avnav@wellenvogel.de"
     body=email_body
 %}
+
+gesendet werden; alternativ kann in diesem Repository ein [Issue](#TODO) geöffnet werden.
+
+## Update eines Plugins
+
+Die folgenden Felder beschreiben die für ein Update benötigten Informationen:
+
+{% include plugin-fields-table.html fields="name,version,download_url" %}
+
+Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin der automatische Erkennungsmechanismus `github` gesetzt ist, ist kein manuelles Update nötig.
+
+{% capture update_body %}{% include plugin-email-body.txt fields="name,version,download_url" update=true %}{% endcapture %}
+
+Ein manuelles Update kann per E-Mail
+{% include mailto.html
+    subject="Plugin Update"
+    text="avnav@wellenvogel.de"
+    body=update_body
+%}
+oder per [Issue](#TODO) gemeldet werden.

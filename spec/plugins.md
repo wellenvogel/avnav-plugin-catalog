@@ -12,7 +12,7 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **type**: string
 
-**visible**: card: yes, user input: yes
+**visible**: card: yes, user input: yes user update: yes
 
 **mandatory**
 
@@ -25,7 +25,7 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **type**; dictionary with entries for en and de
 
-**visible**: card: yes (language specific dict entry), user input: both dict entries
+**visible**: card: yes (language specific dict entry), user input: both dict entries - at least one of them
 
 **mandatory**: in user input at least one of both must be provided
 
@@ -38,7 +38,7 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **type**: number or SemVer string
 
-**visible**: card: yes, user input: yes
+**visible**: card: yes, user input: yes, user update: yes
 
 **mandatory**
 
@@ -103,7 +103,7 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **type**: URL, cancontain $version
 
-**visible**: card yes as download, user input yes
+**visible**: card yes as download, user input yes, user update: yes
 
 **mandatory**: yes if plugin type is zip.
 
@@ -197,7 +197,13 @@ If this file is changed you need to update:
 /docs/_data/cards.yml, 
 /docs/_data/plugin_fields.yml
 
-and the users of those data files
+keep links in descriptions where possible
+
+and the users of those data files.
+  * visible user input means visible for the creation of a new plugin (mail template and issue template)
+  * visible user update means visible for update (mail template and issue template)
+
+**translation hints**: keep SemVer in english and german.
 
 
 

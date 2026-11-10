@@ -1,6 +1,12 @@
 {% assign field_language = page.lang | default: 'en' %}
-{% if field_language == 'de' %}Bitte ergänzen Sie die Angaben für den Plugin-Katalog:
+{% if include.fields %}{% assign display_fields = include.fields | split: "," %}{% endif %}
+{% if field_language == 'de' %}{% if include.update %}Bitte aktualisieren Sie die folgenden Angaben für den Plugin-Katalog:
+{% else %}Bitte ergänzen Sie die Angaben für den Plugin-Katalog:
+{% endif %}{% else %}{% if include.update %}Please update the following information in the plugin catalog:
 {% else %}Please provide the following information for the plugin catalog:
 {% endif %}
-{% for field in site.data.plugin_fields %}{% if field[1].short %}{{ field[0] }} ({{ field[1].short[field_language] | default: field[1].short.en }}): {{ field[1].placeholder }}
+{% endif %}
+{% for field in site.data.plugin_fields %}{% if field[1].short %}{% if include.fields == nil or display_fields contains field[0] %}*{{ field[0] }}* ({{ field[1].description[field_language] | default: field[1].description.en }}):
+>
+{% endif %}
 {% endif %}{% endfor %}

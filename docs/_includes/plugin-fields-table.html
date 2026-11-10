@@ -1,4 +1,5 @@
 {% assign field_language = page.lang | default: 'en' %}
+{% if include.fields %}{% assign display_fields = include.fields | split: "," %}{% endif %}
 <table>
   <thead>
     <tr>
@@ -8,10 +9,12 @@
   </thead>
   <tbody>
     {% for field in site.data.plugin_fields %}
+      {% if include.fields == nil or display_fields contains field[0] %}
       <tr>
         <td><code>{{ field[0] | escape }}</code></td>
         <td>{{ field[1].description[field_language] | default: field[1].description.en | markdownify }}</td>
       </tr>
+      {% endif %}
     {% endfor %}
   </tbody>
 </table>
