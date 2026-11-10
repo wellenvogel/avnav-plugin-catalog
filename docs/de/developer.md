@@ -36,7 +36,7 @@ Die Informationen können per E-Mail an
     body=email_body
 %}
 
-gesendet werden; alternativ kann in diesem Repository ein [Issue]({{site.github.repository_url}}/issues/new?template=AddPlugin) geöffnet werden.
+gesendet werden; alternativ kann in diesem Repository ein [Issue]({{site.github.repository_url}}/issues/new?template=AddPlugin.de.md) geöffnet werden.
 
 ## Update eines Plugins
 
@@ -54,4 +54,4 @@ Ein manuelles Update kann per E-Mail
     text="avnav@wellenvogel.de"
     body=update_body
 %}
-oder per [Issue]({{site.github.repository_url}}/issues/new?template=UpdatePlugin) gemeldet werden.
+oder per [Issue]({{site.github.repository_url}}/issues/new?template=UpdatePlugin.de.md) gemeldet werden.

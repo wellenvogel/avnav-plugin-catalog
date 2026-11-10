@@ -26,7 +26,7 @@ The following fields describe the information needed for a catalog entry:
 
 {% include plugin-fields-table.html %}
 
-You can send the information by email or open an [issue]({{site.github.repository_url}}/issues/new?template=AddPlugin) in this repository.
+You can send the information by email or open an [issue]({{site.github.repository_url}}/issues/new?template=AddPlugin.md) in this repository.
 
 {% capture email_body %}{% include plugin-email-body.txt %}{% endcapture %}
 {% include mailto.html
@@ -51,4 +51,4 @@ You can report a manual update by email
     text="avnav@wellenvogel.de"
     body=update_body
 %}
-or by opening an [issue]({{site.github.repository_url}}/issues/new?template=AddPlugin).
+or by opening an [issue]({{site.github.repository_url}}/issues/new?template=UpdatePlugin.md).
