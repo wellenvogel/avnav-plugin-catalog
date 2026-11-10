@@ -25,6 +25,12 @@ Bitte ergänze die folgenden Angaben für den Plugin-Katalog:
 **download_url** (Pflicht für `zip`. Eine Download-URL; `$version` wird durch die Plugin-Version ersetzt.):
 >
 
+**documentation** (Optionale URL zur Plugin-Dokumentation. Wenn sie `$version` enthält, wird dieser Platzhalter beim Erzeugen des Links durch die aktuelle Plugin-Version ersetzt.):
+>
+
+**minversion** (Optionale minimale erforderliche AvNav-Version. Optional kann eine maximale Version als Bereich angegeben werden, zum Beispiel `20120101..20260101`.):
+>
+
 **src_url** (Optional. URL des Quellcodes; bei einem GitHub-basierten Plugin muss es die GitHub-Repository-URL sein.):
 >
 

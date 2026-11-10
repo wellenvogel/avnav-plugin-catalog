@@ -13,5 +13,8 @@ Please update the following information in the plugin catalog:
 **version** (Required. A number or [SemVer](https://semver.org/) version string matching the version reported in `plugin.json`.):
 >
 
+**minversion** (Optional minimum required AvNav version. You can optionally specify a maximum version as a range, for example `20120101..20260101`.):
+>
+
 **download_url** (Required for `zip`. A download URL; `$version` is replaced with the plugin version.):
 >

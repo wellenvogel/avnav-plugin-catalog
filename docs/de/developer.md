@@ -45,11 +45,11 @@ gesendet werden; alternativ kann in diesem Repository ein [Issue]({{site.github.
 
 Die folgenden Felder beschreiben die für ein Update benötigten Informationen:
 
-{% include plugin-fields-table.html fields="name,version,download_url" %}
+{% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
 Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin der automatische Erkennungsmechanismus `github` gesetzt ist, ist kein manuelles Update nötig.
 
-{% capture update_body %}{% include plugin-email-body.txt fields="name,version,download_url" update=true %}{% endcapture %}
+{% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 
 Ein manuelles Update kann per E-Mail
 {% include mailto.html

@@ -57,6 +57,10 @@
       <dl>
         <dt>{{ card_titles.version[card_language] | default: card_titles.version.en }}</dt>
         <dd data-name="version">{{ item.version }}</dd>
+        {% if item.minversion and item.minversion != empty %}
+          <dt>{{ card_titles.minversion[card_language] | default: card_titles.minversion.en }}</dt>
+          <dd data-name="minversion">{{ item.minversion | escape }}</dd>
+        {% endif %}
         {% if item.author and item.author != empty %}
           <dt>{{ card_titles.author[card_language] | default: card_titles.author.en }}</dt>
           <dd data-name="author">{{ item.author }}</dd>
@@ -100,6 +104,10 @@
         {% endif %}
         {% if item.src_url and item.src_url != empty %}
           <a data-name="src_url" href="{{ item.src_url | escape }}">{{ card_titles.src_url[card_language] | default: card_titles.src_url.en }}</a>
+        {% endif %}
+        {% if item.documentation and item.documentation != empty %}
+          {% assign documentation_url = item.documentation | replace: '$version', item.version %}
+          <a data-name="documentation" href="{{ documentation_url | escape }}">{{ card_titles.documentation[card_language] | default: card_titles.documentation.en }}</a>
         {% endif %}
       {% endcapture %}
       {% assign item_links = item_links | strip %}

@@ -111,6 +111,32 @@ If the plugin entry contians a known `update` mode a GitHub action will update t
 
 **description**: The URL that the plugin can be downloaded from (exactly the version mentioned in version). Can contain $version as placeholder.
 
+### documentation
+**label**: en: Documentation, de: Dokumentation
+
+**type**: URL; may contain the `$version` placeholder, which is replaced with the current plugin version when the link is rendered.
+
+**visible**: card: yes, as a documentation link; user input: yes
+
+**mandatory**: no
+
+**short**: URL of the plugin documentation.
+
+**description**: Optional URL to the plugin documentation. If it contains `$version`, that placeholder is replaced with the current plugin version when the documentation link is rendered.
+
+### minversion
+**label**: en: Min. AvNav, de: Min. AvNav
+
+**type**: String (optional nnn..nnn)
+
+**visible**: card: yes, user input: yes, user update: yes
+
+**mandatory**: no
+
+**short**: Required AvNav version
+
+**description**: The minimal required AvNav version. Optionally you can add a max AvNav version like 20120101..20260101.
+
 ### platform
 **label**: en: Platform, de: Plattform
 
@@ -190,20 +216,23 @@ This command is also run by the daily GitHub action.
 
 The update will consider the `src_url` being a GitHub repository and will determine the latest release. It will consider the release name being the version. If it differs from the current version it will update `version` and `last_updated`. Only valid for type `zip`.
 
+If `documentation` contains `$version`, the rendered documentation link follows the current version automatically; the stored `documentation` value is not changed by the update.
+
 
 ### Agents
 
-If this file is changed you need to update:
-/docs/_data/cards.yml, 
-/docs/_data/plugin_fields.yml
+If this file is changed, update the corresponding schema and UI surfaces as needed, including:
 
-keep links in descriptions where possible
+- `/docs/_data/cards.yml`
+- `/docs/_data/plugin_fields.yml`
+- `/docs/_includes/list-container.html`
+- the email and issue templates that collect user input
 
-and the users of those data files.
-  * visible user input means visible for the creation of a new plugin (mail template and issue template)
-  * visible user update means visible for update (mail template and issue template)
+Keep links in descriptions where possible.
+
+- `visible: user input` means the field appears when creating a plugin (email and issue templates).
+- `visible: user update` means the field appears when requesting a plugin update (email and issue templates).
 
 **translation hints**: keep SemVer in english and german.
-
 
 

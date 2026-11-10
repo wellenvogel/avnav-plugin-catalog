@@ -25,6 +25,12 @@ Please provide the following information for the plugin catalog:
 **download_url** (Required for `zip`. A download URL; `$version` is replaced with the plugin version.):
 >
 
+**documentation** (Optional URL to the plugin documentation. If it contains `$version`, that placeholder is replaced with the current plugin version when the link is rendered.):
+>
+
+**minversion** (Optional minimum required AvNav version. You can optionally specify a maximum version as a range, for example `20120101..20260101`.):
+>
+
 **src_url** (Optional. URL of the source code; for a GitHub-based plugin it must be the GitHub repository URL.):
 >
 

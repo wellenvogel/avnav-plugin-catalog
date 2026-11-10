@@ -31,6 +31,12 @@ date_format:
 download_url:
   en: Download
   de: Herunterladen
+documentation:
+  en: Documentation
+  de: Dokumentation
+minversion:
+  en: Min. AvNav
+  de: Min. AvNav
 src_url:
   en: Source
   de: Quelle

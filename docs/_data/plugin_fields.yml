@@ -46,6 +46,22 @@ download_url:
     en: Required for `zip`. A download URL; `$version` is replaced with the plugin version.
     de: Pflicht für `zip`. Eine Download-URL; `$version` wird durch die Plugin-Version ersetzt.
   placeholder: "[URL]"
+documentation:
+  short:
+    en: Optional; plugin documentation URL
+    de: Optional; URL der Plugin-Dokumentation
+  description:
+    en: Optional URL to the plugin documentation. If it contains `$version`, that placeholder is replaced with the current plugin version when the link is rendered.
+    de: Optionale URL zur Plugin-Dokumentation. Wenn sie `$version` enthält, wird dieser Platzhalter beim Erzeugen des Links durch die aktuelle Plugin-Version ersetzt.
+  placeholder: "[URL]"
+minversion:
+  short:
+    en: Optional; required AvNav version, optionally a range
+    de: Optional; erforderliche AvNav-Version, optional als Bereich
+  description:
+    en: Optional minimum required AvNav version. You can optionally specify a maximum version as a range, for example `20120101..20260101`.
+    de: Optionale minimale erforderliche AvNav-Version. Optional kann eine maximale Version als Bereich angegeben werden, zum Beispiel `20120101..20260101`.
+  placeholder: "[version or range]"
 src_url:
   short:
     en: Optional; repository URL for github updates

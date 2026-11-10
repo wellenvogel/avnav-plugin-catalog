@@ -1,3 +1,105 @@
+- name: ochartsng
+  description:
+    en: OChartsNG plugin for AvNav
+    de: OChartsNG Plugin für AvNav
+  version: "20260703"
+  author: wellenvogel
+  license: MIT and others
+  src_url: "https://github.com/wellenvogel/ochartsng"
+  platform: [linux, raspberry]
+  documentation: "https://www.wellenvogel.net/software/avnav/newDoc/latest/en/special/ochartsng.html"
+  type: package
+  
+- name: history
+  description:
+    en: History plugin for AvNav
+    de: History Plugin für AvNav
+  version: "20260702"
+  author: wellenvogel
+  license: MIT
+  src_url: "https://github.com/wellenvogel/avnav-history-plugin"
+  platform: [linux, raspberry]
+  documentation: "https://github.com/wellenvogel/avnav-history-plugin/blob/master/Readme.md"
+  type: package
+
+- name: update
+  description:
+    en: Package updater for AvNav Images and OpenPlotter
+    de: Paket-Updater für AvNav Images und OpenPlotter
+  version: "20261029"
+  author: wellenvogel
+  license: MIT
+  src_url: "https://github.com/wellenvogel/avnav-update-plugin"
+  platform: [raspberry]
+  documentation: "https://github.com/wellenvogel/avnav-update-plugin/blob/master/Readme.md"
+  type: package
+
+- name: mapproxy
+  description:
+    en: MapProxy plugin for AvNav
+    de: MapProxy Plugin für AvNav
+  version: "20260702"
+  author: wellenvogel
+  license: MIT
+  src_url: "https://github.com/wellenvogel/avnav-mapproxy-plugin"
+  platform: [linux, raspberry]
+  documentation: "https://github.com/wellenvogel/avnav-mapproxy-plugin/blob/master/Readme.md"
+  type: package
+
+- name: polarrecorder
+  description:
+    en: PolarRecorder plugin for AvNav
+    de: PolarRecorder Plugin für AvNav
+  version: "1.0.0-beta.10"
+  author: metzger100
+  src_url: "https://github.com/metzger100/polarrecorder"
+  platform: [linux, raspberry]
+  documentation: "https://github.com/metzger100/polarrecorder/"
+  type: zip
+  download_url: "https://github.com/metzger100/polarrecorder/releases/download/v1.0.0-beta.10/polarrecorder-1.0.0-beta.10.zip"
+
+- name: aiscpa
+  description:
+    en: Draws AIS CPA vectors and AIS ship dimensions
+    de: Zeichnet AIS CPA Vektoren und AIS Schiffsdimensionen
+  version: "20261108"
+  author: nocheinpeter
+  license: MIT
+  src_url: "https://github.com/nocheinpeter/avnav-aiscpaplugin"
+  platform: [all]
+  documentation: "https://github.com/nocheinpeter/avnav-aiscpaplugin/"
+  type: zip
+  download_url: "https://github.com/nocheinpeter/avnav-aiscpaplugin/releases/download/releas20261108/avnav-aiscpaplugin-20261108.zip"
+  file_name: "avnav-aiscpaplugin-$version.zip"
+  minversion: "20260104"
+
+- name: asw
+  description:
+    en: AvNav plugin for auto-sea-way
+    de: AvNav Plugin für auto-sea-way
+  version: "0.0.1"
+  author: auto-sea-way
+  license: MIT
+  src_url: "https://github.com/auto-sea-way/avnav-plugin"
+  platform: [linux,raspberry]
+  documentation: "https://github.com/auto-sea-way/avnav-plugin/"
+  type: zip
+  download_url: "https://github.com/auto-sea-way/avnav-plugin/releases/download/v0.1.1/avnav-asw-0.1.1.zip"
+  minversion: "20261102"
+
+- name: dyninstruments
+  description:
+    en: Dynamic instruments plugin for AvNav
+    de: Dynamische Instrumente Plugin für AvNav
+  version: "v3.9.1"
+  author: metzger100
+  license: MIT
+  src_url: "https://github.com/metzger100/dyninstruments"
+  platform: [all]
+  documentation: "https://github.com/metzger100/dyninstruments"
+  type: zip
+  download_url: "https://github.com/metzger100/dyninstruments/releases/download/v3.9.1/dyninstruments-3.9.1.zip"
+
 - name: font-noto
   description:
     en: Noto fonts for AvNav

@@ -42,11 +42,11 @@ You can send the information by email or open an [issue]({{site.github.repositor
 
 The following fields describe the information needed for an update:
 
-{% include plugin-fields-table.html fields="name,version,download_url" %}
+{% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
 For ZIP plugins, provide the download URL if it has changed. If the automatic `github` update mode is enabled for the plugin, no manual update is needed.
 
-{% capture update_body %}{% include plugin-email-body.txt fields="name,version,download_url" update=true %}{% endcapture %}
+{% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 
 You can report a manual update by email
 {% include mailto.html
