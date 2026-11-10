@@ -9,7 +9,7 @@
   platform: [linux, raspberry]
   documentation: "https://www.wellenvogel.net/software/avnav/newDoc/latest/en/special/ochartsng.html"
   type: package
-  
+
 - name: history
   description:
     en: History plugin for AvNav
@@ -81,7 +81,7 @@
   author: auto-sea-way
   license: MIT
   src_url: "https://github.com/auto-sea-way/avnav-plugin"
-  platform: [linux,raspberry]
+  platform: [linux, raspberry]
   documentation: "https://github.com/auto-sea-way/avnav-plugin/"
   type: zip
   download_url: "https://github.com/auto-sea-way/avnav-plugin/releases/download/v0.1.1/avnav-asw-0.1.1.zip"
@@ -168,7 +168,7 @@
   platform: [android, linux, windows, raspberry]
   type: zip
   update: github
-  last_updated: 2026-11-08T19:32:57.617Z
+  last_updated: 2026-11-10T20:19:39.842Z
 
 - name: documentation
   description:
@@ -181,7 +181,7 @@
   documentation: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugin-list.html#documentation"
   type: zip
   download_url: "https://www.wellenvogel.de/software/avnav/downloads/release/20261102/documentation-20261102.zip"
-  
+
 - name: docvideos
   description:
     en: Videos for AvNav documentation
@@ -201,7 +201,7 @@
   version: "20250319"
   author: wellenvogel
   license: MIT
-  platform: [raspberry,linux]
+  platform: [raspberry, linux]
   src_url: "https://github.com/wellenvogel/avnav-seatalk-remote-plugin"
   documentation: "https://github.com/wellenvogel/avnav-seatalk-remote-plugin"
   type: package
@@ -216,7 +216,7 @@
   version: "20260621"
   author: kdschmidt1
   license: MIT
-  platform: [raspberry,linux]
+  platform: [raspberry, linux]
   src_url: "https://github.com/kdschmidt1/Sail_Instrument"
   documentation: "https://github.com/kdschmidt1/Sail_Instrument"
   type: package
@@ -232,7 +232,7 @@
   version: "20250312"
   author: wellenvogel
   license: MIT
-  platform: [raspberry,linux]
+  platform: [raspberry, linux]
   src_url: "https://github.com/wellenvogel/avnav-obp-rc-remote-plugin"
   documentation: "https://github.com/wellenvogel/avnav-obp-rc-remote-plugin"
   type: package
@@ -242,12 +242,12 @@
 
 - name: obp-plotterv3
   description:
-    en: Setup for OBP Plotter V3 
+    en: Setup for OBP Plotter V3
     de: Einrichtung für OBP Plotter V3
   version: "20250317"
   author: wellenvogel
   license: MIT
-  platform: [raspberry,linux]
+  platform: [raspberry, linux]
   src_url: "https://github.com/wellenvogel/avnav-obp-plotterv3-plugin"
   documentation: "https://github.com/wellenvogel/avnav-obp-plotterv3-plugin"
   type: package
