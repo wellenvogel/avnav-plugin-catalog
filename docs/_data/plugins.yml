@@ -8,6 +8,7 @@
   src_url: "https://github.com/wellenvogel/ochartsng"
   platform: [linux, raspberry]
   documentation: "https://www.wellenvogel.net/software/avnav/newDoc/latest/en/special/ochartsng.html"
+  download_url: "https://www.wellenvogel.net/software/avnav/downloads/release-ochartsng/$version/"
   type: package
   update: repository
   repository:
