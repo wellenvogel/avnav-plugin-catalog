@@ -106,7 +106,7 @@
         {% endif %}
         {% if item.type and item.type != empty %}
           <dt>{{ card_titles.type[card_language] | default: card_titles.type.en }}</dt>
-          <dd data-name="type">{{ item.type | escape }}{% if item.type == 'package' and item.repository and item.repository != empty %} [repository]{% endif %}</dd>
+          <dd data-name="type">{{ item.type | escape }}{% if item.type == 'package' and item.repository and item.repository != empty %} {% if item.repository.available and item.repository.available != empty %}<a href="#repository-dialog-{{ forloop.index }}" class="repository-dialog-open" aria-haspopup="dialog" aria-controls="repository-dialog-{{ forloop.index }}">[repository]</a>{% else %}[repository]{% endif %}{% endif %}</dd>
         {% endif %}
         {% if item.last_updated and item.last_updated != empty %}
           {% assign date_format = card_titles.date_format[card_language] | default: card_titles.date_format.en %}
@@ -129,6 +129,37 @@
       {% assign item_links = item_links | strip %}
       {% if item_links != empty %}
         <div class="list-item-links">{{ item_links }}</div>
+      {% endif %}
+      {% if item.type == 'package' and item.repository.available and item.repository.available != empty %}
+        <dialog class="repository-dialog" id="repository-dialog-{{ forloop.index }}" aria-labelledby="repository-dialog-title-{{ forloop.index }}">
+          <h3 id="repository-dialog-title-{{ forloop.index }}">
+            {{ card_titles.repository_packages[card_language] | default: card_titles.repository_packages.en | escape }}: {{ item.name | escape }}
+            {% for variant in item.repository.available limit: 1 %}
+              <span class="repository-package-title">{{ card_titles.repository_package[card_language] | default: card_titles.repository_package.en | escape }}: {{ variant[1].package_name | escape }}</span>
+            {% endfor %}
+          </h3>
+          <div class="repository-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">{{ card_titles.repository_variant[card_language] | default: card_titles.repository_variant.en | escape }}</th>
+                  <th scope="col">{{ card_titles.version[card_language] | default: card_titles.version.en | escape }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for variant in item.repository.available %}
+                  <tr>
+                    <td>{{ variant[0] | escape }}</td>
+                    <td><a href="{{ variant[1].download_url | escape }}">{{ variant[1].version | escape }}</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <form method="dialog">
+            <button type="submit">{{ card_titles.close[card_language] | default: card_titles.close.en | escape }}</button>
+          </form>
+        </dialog>
       {% endif %}
     </div>
   {% endfor %}

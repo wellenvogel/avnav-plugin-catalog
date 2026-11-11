@@ -19,6 +19,18 @@ type:
 type_both:
   en: Both
   de: Beide
+repository_packages:
+  en: Repository packages
+  de: Repository-Pakete
+repository_variant:
+  en: Variant
+  de: Variante
+repository_package:
+  en: Package
+  de: Paket
+close:
+  en: Close
+  de: Schließen
 version:
   en: Version
   de: Version
