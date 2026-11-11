@@ -1,0 +1,12 @@
+repositories:
+  default: "https://www.free-x.de/debian/"
+
+variants:
+  trixie:
+    armhf: "main/binary-armhf"
+    arm64: "main/binary-arm64"
+    amd64: "main/binary-amd64"
+  bookworm:
+    armhf: "main/binary-armhf"
+    arm64: "main/binary-arm64"
+    amd64: "main/binary-amd64"

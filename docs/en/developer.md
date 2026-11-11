@@ -44,7 +44,7 @@ The following fields describe the information needed for an update:
 
 {% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
-For ZIP plugins, provide the download URL if it has changed. If the automatic `github` update mode is enabled for the plugin, no manual update is needed.
+For ZIP plugins, provide the download URL if it has changed. If the automatic `github` or `repository` update mode is enabled for the plugin, no manual update is needed.
 
 {% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 

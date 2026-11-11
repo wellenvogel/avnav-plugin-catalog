@@ -1,7 +1,4 @@
-const releasePatterns = {
-  "#semver#": String.raw`((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)`,
-  "#simple#": String.raw`([0-9]*)`,
-};
+import { expandPattern, matchVersion } from "./version_pattern.js";
 
 function releaseVersion(entry, release) {
   if (entry.release_pattern === undefined || entry.release_pattern === null) {
@@ -15,7 +12,7 @@ function releaseVersion(entry, release) {
   if (typeof entry.release_pattern !== "string" || entry.release_pattern.length === 0) {
     throw new TypeError(`Invalid release_pattern for ${entry.name}: expected a non-empty string (${context})`);
   }
-  const pattern = entry.release_pattern.replace(/#semver#|#simple#/g, (token) => releasePatterns[token]);
+  const pattern = expandPattern(entry.release_pattern);
   let expression;
   try {
     expression = new RegExp(pattern);
@@ -26,8 +23,7 @@ function releaseVersion(entry, release) {
     if (typeof candidate !== "string" || candidate.length === 0) {
       continue;
     }
-    const match = expression.exec(candidate);
-    const version = match && (match.length > 1 ? match[1] : match[0]);
+    const version = matchVersion(expression, candidate);
     if (version) {
       return version;
     }

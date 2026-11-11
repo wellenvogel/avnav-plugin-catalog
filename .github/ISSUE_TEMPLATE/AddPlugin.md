@@ -43,7 +43,7 @@ Please provide the following information for the plugin catalog:
 **license** (Optional. An abbreviation identifying the plugin license.):
 >
 
-**update** (Optional. `github` checks the repository in `src_url` for releases and updates `version` using the release name or `release_pattern`. It is valid for `zip` plugins only. If `filename` is provided, a matching release asset also updates `download_url`.):
+**update** (Optional. `github` checks the repository in `src_url` for releases and updates `version` using the release name or `release_pattern`. It is valid for `zip` plugins only. If `filename` is provided, a matching release asset also updates `download_url`. `repository` updates packages from a configured Debian repository.):
 >
 
 **filename** (Optional for `github`. Search release assets for this filename and set `download_url` to the matching asset URL. The filename may contain `$version` as a placeholder.):

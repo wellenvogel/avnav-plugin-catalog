@@ -47,7 +47,7 @@ Die folgenden Felder beschreiben die für ein Update benötigten Informationen:
 
 {% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
-Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin der automatische Erkennungsmechanismus `github` gesetzt ist, ist kein manuelles Update nötig.
+Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin der automatische Erkennungsmechanismus `github` oder `repository` gesetzt ist, ist kein manuelles Update nötig.
 
 {% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 

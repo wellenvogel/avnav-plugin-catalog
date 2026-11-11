@@ -50,3 +50,20 @@ The `zip` checker downloads the proposed `download_url` (substituting
 `$version`) and reads only `<name>/plugin.json` from the archive. It rejects
 missing or invalid metadata and version mismatches. The `package` checker is
 currently a placeholder and accepts all updates.
+
+## Debian repository updates
+
+For `update: repository`, set `type: package` and a `repository` mapping with
+`package`; optionally set `variants` (for example `trixie.armhf`) and `url`.
+Missing, null, or empty `variants` select all variants in `docs/_data/packages.yml`.
+The default URL and variant paths are also in that file. The
+updater reads `Packages.gz` (or `Packages` if the compressed index is absent).
+It stores `repository.available` as a mapping from variant to `package_name`,
+`version` and `download_url`, and sets `version` to the highest Debian version.
+An optional `repository.version_pattern` extracts the top-level plugin version
+from that highest package version using JavaScript regular-expression syntax,
+the same `#semver#` and `#simple#` placeholders and capture rules as
+`release_pattern`. A missing or empty match is an error. The per-variant
+`available` versions remain the full Debian package versions.
+Missing packages are omitted per variant; if none are found, the update fails.
+Index download or parsing errors also fail the update without partial changes.

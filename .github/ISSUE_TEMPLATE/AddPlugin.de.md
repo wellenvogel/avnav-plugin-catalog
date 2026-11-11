@@ -43,7 +43,7 @@ Bitte ergänze die folgenden Angaben für den Plugin-Katalog:
 **license** (Optional. Eine Abkürzung für die Plugin-Lizenz.):
 >
 
-**update** (Optional. `github` prüft das Repository in `src_url` auf Releases und aktualisiert `version` anhand des Release-Namens oder von `release_pattern`. Nur für `zip`-Plugins gültig. Ist `filename` angegeben, aktualisiert ein passendes Release-Asset auch `download_url`.):
+**update** (Optional. `github` prüft das Repository in `src_url` auf Releases und aktualisiert `version` anhand des Release-Namens oder von `release_pattern`. Nur für `zip`-Plugins gültig. Ist `filename` angegeben, aktualisiert ein passendes Release-Asset auch `download_url`. `repository` aktualisiert Pakete aus einem konfigurierten Debian-Repository.):
 >
 
 **filename** (Optional für `github`. In den Release-Assets nach diesem Dateinamen suchen und `download_url` auf die URL des passenden Assets setzen. Der Dateiname kann `$version` als Platzhalter enthalten.):

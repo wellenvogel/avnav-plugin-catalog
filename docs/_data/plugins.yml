@@ -9,7 +9,36 @@
   platform: [linux, raspberry]
   documentation: "https://www.wellenvogel.net/software/avnav/newDoc/latest/en/special/ochartsng.html"
   type: package
-  last_updated: 2026-11-10T20:22:50.502Z
+  update: repository
+  repository:
+    package: avnav-ochartsng
+    version_pattern: '#simple#-.*'
+    available:
+      trixie.armhf:
+        package_name: avnav-ochartsng
+        version: 20260703-raspbian-trixie
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-raspbian-trixie_armhf.deb
+      trixie.arm64:
+        package_name: avnav-ochartsng
+        version: 20260703-raspbian-trixie
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-raspbian-trixie_arm64.deb
+      trixie.amd64:
+        package_name: avnav-ochartsng
+        version: 20260703-debian-trixie
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-debian-trixie_amd64.deb
+      bookworm.armhf:
+        package_name: avnav-ochartsng
+        version: 20260703-raspbian-bookworm
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-raspbian-bookworm_armhf.deb
+      bookworm.arm64:
+        package_name: avnav-ochartsng
+        version: 20260703-raspbian-bookworm
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-raspbian-bookworm_arm64.deb
+      bookworm.amd64:
+        package_name: avnav-ochartsng
+        version: 20260703-debian-bookworm
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-ochartsng/avnav-ochartsng_20260703-debian-bookworm_amd64.deb
+  last_updated: 2026-11-11T11:38:01.305Z
 
 - name: history
   description:

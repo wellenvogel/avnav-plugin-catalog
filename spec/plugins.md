@@ -196,6 +196,8 @@ Existing non-empty values are preserved. The timestamp records when the field wa
 `github`: src_url must point to a GitHub repository. By default the release name is the version number; `release_pattern` can extract it from the name instead. The updater checks for new releases and updates the `version` entry.
 If a `filename` is provided (can contain $version) the update will look for a file matching the filename in the assets directory and will update `download_url` with the url of this file.
 
+`repository`: special update handling for packages, see `repositories`.
+
 ### filename
 **type**: string
 
@@ -232,6 +234,43 @@ Patterns use JavaScript regular expression syntax and match anywhere in the rele
 
 If release_pattern is given first try the release name and if the matching fails try the release tag.
 --end not for templates
+
+### repository
+**type**: dictionary - see description
+
+**visible**: no
+
+**mandatory**: no
+
+**short**: Debian repository info
+
+**description**: Only for type `package`. If this field is not empty the type field should show package [repository] on the cards.
+
+-- not for templates
+In this field we define which repository should have which variant. The update script should query the repositories and fetch the available information.
+
+*structure*
+```
+  repository:
+    url: #optional, otherwise default
+    package: the-name-of-the-package #mandatory
+    variants: [trixie.armhf,...]
+    available: to be filled by updater with a list of variant: package
+    version_pattern: a similar pattern to release_pattern to extract the final version from the package version. If not matching - error.
+```
+The variants must match entries from docs/_data/packages.yml. 
+Updates should run when update==`repository`. It should fetch the package lists from the debian repository found at `url` (default: repositories.default from packages.yml). It should use the given variants, download the Package list for the variant from the debian repo, look for the package name and fill the `available`field with a dictionary (key is the variant) of:
+   package_name:
+   version:
+   download_url
+
+The mapping between variants and repository locations is in packages.yml.
+The highest version being found should be used as the version in the update.
+If a variant is not found, omit this. If no variant found handle this as error.
+
+If no variants are given, default to all variants from packages.yml.
+
+-- end not for templates
 
 
 ## Updates
