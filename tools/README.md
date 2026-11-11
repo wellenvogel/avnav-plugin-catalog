@@ -29,6 +29,9 @@ missing or invalid checker is an error. Entries without actual changes are
 not checked by default. Per-plugin errors in the console and marker identify
 the failing phase (`update` or `check`) and its update mode or proposed plugin
 type.
+The console logs each updater result before checking and the proposed entry
+passed to each checker. Runtime options, including the access token, are not
+included in these logs.
 
 Use `-c` to check every entry, including unchanged entries and entries whose
 update failed. Changed entries are checked once, with their proposed values;

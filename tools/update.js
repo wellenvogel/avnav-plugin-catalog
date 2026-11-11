@@ -77,6 +77,7 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
       if (!options.skipUpdate) {
         try {
           const updates = await updater(structuredClone(entry), options);
+          console.log(`Update result for ${JSON.stringify(entry.name ?? `entry ${index + 1}`)}: ${JSON.stringify(updates) ?? "undefined"}`);
           if (updates !== undefined && updates !== null) {
             if (
               typeof updates !== "object" ||
@@ -101,6 +102,7 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
         const proposedType = Object.hasOwn(changedFields, "type") ? changedFields.type : entry.type;
         try {
           const proposed = structuredClone({ ...entry, ...changedFields });
+          console.log(`Check entry parameters: ${JSON.stringify(proposed)}`);
           await checker(proposed, options);
         } catch (error) {
           recordError("check", proposedType, error);
