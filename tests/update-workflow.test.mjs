@@ -62,6 +62,8 @@ test("workflow uploads hidden marker and defers updater errors until after commi
   assert.ok(updateIndex >= 0 && updateIndex < commitIndex && commitIndex < uploadIndex && uploadIndex < reportIndex);
   assert.equal(update.id, "update");
   assert.equal(update["continue-on-error"], true);
+  assert.equal(update.env.GITHUB_TOKEN, "${{ secrets.GITHUB_TOKEN }}");
+  assert.match(update.run, /node tools\/update\.js -a "\$GITHUB_TOKEN"/);
   assert.equal(upload.if, "${{ always() }}");
   assert.equal(upload.uses, "actions/upload-artifact@v4");
   assert.equal(upload.with.path, ".update");

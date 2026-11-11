@@ -10,15 +10,17 @@ function releaseVersion(entry, release) {
     }
     return release.name;
   }
+  const describe = (value) => JSON.stringify(value) ?? "undefined";
+  const context = `release_pattern=${describe(entry.release_pattern)}, release name=${describe(release.name)}, release tag=${describe(release.tag_name)}`;
   if (typeof entry.release_pattern !== "string" || entry.release_pattern.length === 0) {
-    throw new TypeError(`Invalid release_pattern for ${entry.name}: expected a non-empty string`);
+    throw new TypeError(`Invalid release_pattern for ${entry.name}: expected a non-empty string (${context})`);
   }
   const pattern = entry.release_pattern.replace(/#semver#|#simple#/g, (token) => releasePatterns[token]);
   let expression;
   try {
     expression = new RegExp(pattern);
   } catch (error) {
-    throw new Error(`Invalid release_pattern for ${entry.name}: ${error.message}`, { cause: error });
+    throw new Error(`Invalid release_pattern for ${entry.name}: ${error.message} (${context}, expanded pattern=${describe(pattern)})`, { cause: error });
   }
   for (const candidate of [release.name, release.tag_name]) {
     if (typeof candidate !== "string" || candidate.length === 0) {
@@ -30,10 +32,10 @@ function releaseVersion(entry, release) {
       return version;
     }
   }
-  throw new Error(`Could not extract a version from release name or tag for ${entry.name} using release_pattern`);
+  throw new Error(`Could not extract a version from release name or tag for ${entry.name} using release_pattern (${context}, expanded pattern=${describe(pattern)})`);
 }
 
-export default async function updateGithub(entry) {
+export default async function updateGithub(entry, options = {}) {
   const sourceUrl = new URL(entry.src_url);
   if (sourceUrl.hostname !== "github.com") {
     throw new Error(`Expected a GitHub repository URL, got: ${entry.src_url}`);
@@ -52,6 +54,7 @@ export default async function updateGithub(entry) {
     headers: {
       Accept: "application/vnd.github+json",
       "User-Agent": "avnav-plugin-catalog",
+      ...(options.accessToken ? { Authorization: `Bearer ${options.accessToken}` } : {}),
     },
   });
   if (!response.ok) {

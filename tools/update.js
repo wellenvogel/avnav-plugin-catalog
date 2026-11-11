@@ -1,14 +1,14 @@
 import { access, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { isDeepStrictEqual } from "node:util";
+import { isDeepStrictEqual, parseArgs } from "node:util";
 import YAML from "yaml";
 
 // Keep the source layout: no folding of long lines, no padding inside [a, b]
 const stringifyOptions = { lineWidth: 0, flowCollectionPadding: false };
 const toolsDirectory = path.dirname(fileURLToPath(import.meta.url));
 
-async function updateEntry(entry) {
+async function updateEntry(entry, options) {
   console.log(`updateEntry parameters: ${JSON.stringify(entry)}`);
 
   if (!entry.update) {
@@ -32,10 +32,10 @@ async function updateEntry(entry) {
   if (typeof updateModule.default !== "function") {
     throw new TypeError(`${modulePath} must have a default-exported async function`);
   }
-  return await updateModule.default(entry);
+  return await updateModule.default(entry, options);
 }
 
-export async function updatePlugins(pluginsFile, markerFile, updater = updateEntry) {
+export async function updatePlugins(pluginsFile, markerFile, updater = updateEntry, options = {}) {
   await rm(markerFile, { force: true });
   const updatedRows = [];
   const errorRows = [];
@@ -58,7 +58,7 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
 
       let changedFields;
       try {
-        const updates = await updater(structuredClone(entry));
+        const updates = await updater(structuredClone(entry), options);
         if (updates === undefined || updates === null) {
           continue;
         }
@@ -118,9 +118,22 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
 }
 
 async function main() {
-  const [, , pluginsArg, markerArg] = process.argv;
-  if (!pluginsArg || !markerArg || process.argv.length !== 4) {
-    throw new Error("Usage: node update.js <plugins.yml> <marker-file>");
+  const usage = "Usage: node update.js [-a <access-token>] <plugins.yml> <marker-file>";
+  let parsed;
+  try {
+    parsed = parseArgs({
+      options: { access: { type: "string", short: "a" } },
+      allowPositionals: true,
+      tokens: true,
+    });
+  } catch {
+    throw new Error(usage);
+  }
+  const [pluginsArg, markerArg] = parsed.positionals;
+  if (!pluginsArg || !markerArg || parsed.positionals.length !== 2 ||
+      parsed.tokens.filter((token) => token.kind === "option" && token.name === "access").length > 1 ||
+      (parsed.values.access !== undefined && !parsed.values.access.trim())) {
+    throw new Error(usage);
   }
 
   // npm run changes the cwd to the package directory; INIT_CWD is where the user started it
@@ -129,7 +142,7 @@ async function main() {
     : process.cwd();
   const pluginsFile = path.resolve(baseDirectory, pluginsArg);
   const markerFile = path.resolve(baseDirectory, markerArg);
-  const changed = await updatePlugins(pluginsFile, markerFile);
+  const changed = await updatePlugins(pluginsFile, markerFile, updateEntry, { accessToken: parsed.values.access });
   console.log(changed ? "Plugin data updated." : "No plugin data changes.");
 }
 

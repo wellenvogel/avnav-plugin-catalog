@@ -146,6 +146,34 @@ test("GitHub release assets update plugin entries", async (t) => {
       globalThis.fetch = async () => ({ ok: true, json: async () => release });
     });
 
+    await t.test("includes the pattern, expanded expression, release name and tag in errors", async () => {
+      globalThis.fetch = async () => ({
+        ok: true, json: async () => ({ name: 'Release "stable"\nnotes', tag_name: "tag-1", assets: [] }),
+      });
+      try {
+        await assert.rejects(updateGithub({ ...entry, release_pattern: "^v#simple#$" }), (error) => {
+          assert.ok(error.message.includes('release_pattern="^v#simple#$"'));
+          assert.ok(error.message.includes('expanded pattern="^v([0-9]*)$"'));
+          assert.ok(error.message.includes('release name="Release \\"stable\\"\\nnotes"'));
+          assert.ok(error.message.includes('release tag="tag-1"'));
+          return true;
+        });
+        await assert.rejects(updateGithub({ ...entry, release_pattern: "[#simple#" }), (error) => {
+          assert.ok(error.message.includes('release_pattern="[#simple#"'));
+          assert.ok(error.message.includes('expanded pattern="[([0-9]*)"'));
+          assert.ok(error.message.includes('release tag="tag-1"'));
+          return true;
+        });
+        await assert.rejects(updateGithub({ ...entry, release_pattern: "" }), (error) => {
+          assert.ok(error.message.includes('release_pattern=""'));
+          assert.ok(error.message.includes('release tag="tag-1"'));
+          return true;
+        });
+      } finally {
+        globalThis.fetch = async () => ({ ok: true, json: async () => release });
+      }
+    });
+
     await t.test("rejects invalid patterns and missing or empty extracted versions", async () => {
       for (const pattern of ["[", "", 123, "^v#semver#$", "^#simple#$", "(x)?2.0"]) {
         await assert.rejects(updateGithub({ ...entry, release_pattern: pattern }), /release_pattern/);
@@ -168,7 +196,13 @@ test("GitHub release assets update plugin entries", async (t) => {
         const output = await readFile(plugins, "utf8");
         assert.match(output, /name: invalid[\s\S]*version: "1\.0"/);
         assert.match(output, /name: valid[\s\S]*version: "2"/);
-        assert.match(await readFile(marker, "utf8"), /^UPDATED\n"valid": .*"version":"2".*\nERROR\n"invalid": .*Could not extract.*\n$/);
+        const report = await readFile(marker, "utf8");
+        assert.match(report, /^UPDATED\n"valid": .*"version":"2".*\nERROR\n"invalid": .*Could not extract.*\n$/);
+        const errorMessage = JSON.parse(report.split("\n")[3].slice('"invalid": '.length));
+        assert.ok(errorMessage.includes('release_pattern="^v#semver#$"'));
+        assert.ok(errorMessage.includes('release name="2.0"'));
+        assert.ok(errorMessage.includes("release tag=undefined"));
+        assert.ok(errorMessage.includes("expanded pattern="));
       } finally {
         await rm(directory, { recursive: true, force: true });
       }

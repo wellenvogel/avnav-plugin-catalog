@@ -30,9 +30,11 @@ jobs:
       - name: Update plugin catalog
         id: update
         continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           status=0
-          node tools/update.js docs/_data/plugins.yml .update || status=$?
+          node tools/update.js -a "$GITHUB_TOKEN" docs/_data/plugins.yml .update || status=$?
           if [ -f .update ]; then
             cat .update
           fi
