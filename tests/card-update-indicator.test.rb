@@ -10,9 +10,13 @@ class CardUpdateIndicatorTest < Minitest::Test
     plugins = [
       { "name" => "GitHub", "update" => "github" },
       { "name" => "Repository", "update" => "repository" },
+      { "name" => "Directory", "update" => "directory" },
       { "name" => "Unknown", "update" => "unknown" },
       { "name" => "Unset" }
     ]
+    %w[github repository directory].each do |updater|
+      assert File.file?(File.join(root, "tools/update_#{updater}.js")), "Missing updater module: #{updater}"
+    end
 
     %w[en de].each do |language|
       html = template.render!(
@@ -20,10 +24,11 @@ class CardUpdateIndicatorTest < Minitest::Test
         "site" => { "data" => { "cards" => cards, "plugins" => plugins, "platforms" => {} } }
       )
       label = cards["automatic_update"][language]
-      assert_equal 2, html.scan('class="automatic-update-indicator"').size
-      assert_equal 2, html.scan("aria-label=\"#{label}\" title=\"#{label}\"").size
+      assert_equal 3, html.scan('class="automatic-update-indicator"').size
+      assert_equal 3, html.scan("aria-label=\"#{label}\" title=\"#{label}\"").size
       assert_match(/<span data-name="name">GitHub<\/span> <span class="automatic-update-indicator"/, html)
       assert_match(/<span data-name="name">Repository<\/span> <span class="automatic-update-indicator"/, html)
+      assert_match(/<span data-name="name">Directory<\/span> <span class="automatic-update-indicator"/, html)
       assert_includes html, '<span data-name="name">Unknown</span></h2>'
       assert_includes html, '<span data-name="name">Unset</span></h2>'
     end

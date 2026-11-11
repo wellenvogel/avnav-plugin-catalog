@@ -68,7 +68,7 @@
       data-sort-name="{{ item.name | escape }}"
       data-sort-version="{{ item.version | escape }}"
       data-sort-last-updated="{{ updated_time | default: '' | escape }}">
-      <h2><span data-name="name">{{ item.name }}</span>{% if item.update == 'github' or item.update == 'repository' %} <span class="automatic-update-indicator" role="img" aria-label="{{ card_titles.automatic_update[card_language] | default: card_titles.automatic_update.en | escape }}" title="{{ card_titles.automatic_update[card_language] | default: card_titles.automatic_update.en | escape }}">🔄</span>{% endif %}</h2>
+      <h2><span data-name="name">{{ item.name }}</span>{% if item.update == 'github' or item.update == 'repository' or item.update == 'directory' %} <span class="automatic-update-indicator" role="img" aria-label="{{ card_titles.automatic_update[card_language] | default: card_titles.automatic_update.en | escape }}" title="{{ card_titles.automatic_update[card_language] | default: card_titles.automatic_update.en | escape }}">🔄</span>{% endif %}</h2>
       <p data-name="description">{{ description }}</p>
       <dl>
         <dt>{{ card_titles.version[card_language] | default: card_titles.version.en }}</dt>

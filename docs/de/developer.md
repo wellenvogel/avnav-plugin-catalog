@@ -50,7 +50,7 @@ Plugin updates im Katalog können auf zwei Arten erfolgen:
 
 ### Automatischer Update
 
-Der Eintrag wird automatisch aktualisiert, wenn eine bekannte Update Funktion hinterlegt ist (Eigenschaft `update`). Beim jeweiligen Plugin wird dann der Indicator 🔄 angezeigt. Momentan sind die Funktionen `github` und `repository` verfügbar.
+Der Eintrag wird automatisch aktualisiert, wenn eine bekannte Update Funktion hinterlegt ist (Eigenschaft `update`). Beim jeweiligen Plugin wird dann der Indicator 🔄 angezeigt. Momentan sind die Funktionen `github`, `repository` und `directory` verfügbar.
 
 #### Update github
 
@@ -83,6 +83,12 @@ Bei Erfolg werden Version und Download-Link aktualisiert.
 Diese Update-Funktion liest die Repository-Metadaten und ermittelt darüber die Version.
 Es werden entsprechende Download-Links für die Pakete erzeugt. Innerhalb von AvNav werden solche Installationen oder Updates über den [Updater](https://github.com/wellenvogel/avnav-update-plugin) ausgeführt. 
 
+#### Update directory
+
+`directory` enthält die URL einer HTML-Verzeichnisliste. `filename` ist ein regulärer JavaScript-Ausdruck, der auf das Ende des Download-Dateinamens passt. Die erste Fanggruppe liefert die Version, ohne Fanggruppe der gesamte Treffer. Wie bei `release_pattern` können `#semver#` und `#simple#` verwendet werden; zum Beispiel findet `plugin-#semver#\.zip` Dateien wie `plugin-1.2.3.zip`.
+
+Der Updater wählt die höchste passende Version und deren Download-Link. Sind alle Treffer SemVer-Versionen, werden sie nach SemVer sortiert; andernfalls wird für alle Treffer eine natürliche numerische Sortierung verwendet. Kann keine Version ermittelt werden, schlägt das Update fehl. ZIP-Downloads werden vor dem Speichern der Änderungen geprüft.
+
 ### Manueller Update
 
 Wenn keine automatische Aktualisierung konfiguriert ist, muss der Eintrag durch den Autor manuell aktualisiert werden.
@@ -91,7 +97,7 @@ Die folgenden Felder beschreiben die für ein Update benötigten Informationen:
 
 {% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
-Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin der automatische Erkennungsmechanismus `github` oder `repository` gesetzt ist, ist kein manuelles Update nötig.
+Bei ZIP-Plugins muss die Download-URL angegeben werden, sofern sie sich geändert hat. Wenn für das Plugin eine automatische Aktualisierung eingerichtet ist, ist kein manuelles Update nötig.
 
 {% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 

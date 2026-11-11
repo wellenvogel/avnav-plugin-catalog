@@ -316,8 +316,11 @@
   platform: [all]
   documentation: "https://www.wellenvogel.de/software/avnav/newDoc/latest/en/special/plugin-list.html#documentation"
   type: zip
+  update: directory
+  filename: "documentation-#simple#.zip"
+  directory: "https://www.wellenvogel.de/software/avnav/downloads/release/latest/"
   download_url: "https://www.wellenvogel.de/software/avnav/downloads/release/20261102/documentation-20261102.zip"
-  last_updated: 2026-11-10T20:22:50.502Z
+  last_updated: 2026-11-11T17:29:04.155Z
 
 - name: docvideos
   description:

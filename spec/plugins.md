@@ -183,7 +183,7 @@ node tools/fill_last_updated.js docs/_data/plugins.yml
 Existing non-empty values are preserved. The timestamp records when the field was filled, not necessarily when the plugin was last updated.
 
 ### update
-**type**: on from the list github,
+**type**: on from the list github, repository, directory
 
 **mandatory**: no
 
@@ -272,6 +272,24 @@ If no variants are given, default to all variants from packages.yml.
 
 -- end not for templates
 
+### directory
+**type**: URL
+
+**visible**: no
+
+**mandatory**: only for update == directory
+
+**short**: Directory URL 
+
+**description**: A plain directory URL, It will be searched for a filename pattern.
+
+-- not for templates
+If the update mode is set to directory filename should be treated the same way as release_pattern:
+The directory content should be fetched and should be parsed for a link that ends with the filename pattern. If a version could be extracted: use this version for update and update the download URL. Ifg multiple matches are found: use the highest version.
+If no version could be extracted: error.
+-- end not for templates
+
+
 
 ## Updates
 
@@ -319,6 +337,8 @@ Keep links in descriptions where possible.
 
 - `visible: user input` means the field appears when creating a plugin (email and issue templates).
 - `visible: user update` means the field appears when requesting a plugin update (email and issue templates).
+
+if the list of values for update changes adapt the update pattern list_container.html. Warn if no matching update_xxx.js exists in the tools directory.
 
 **never change this file without explicit permission**
 

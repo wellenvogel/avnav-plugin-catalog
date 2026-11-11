@@ -154,6 +154,44 @@ test("ZIP checker downloads and validates plugin metadata", async (t) => {
         await rm(directory, { recursive: true, force: true });
       }
     });
+
+    await t.test("checks directory updates before saving and rejects invalid ZIP metadata", async () => {
+      const directory = await mkdtemp(path.join(os.tmpdir(), "avnav-directory-zip-"));
+      try {
+        const plugins = path.join(directory, "plugins.yml");
+        const marker = path.join(directory, ".update");
+        const original = `- name: plugin
+  type: zip
+  version: "1"
+  update: directory
+  directory: https://example.com/downloads/
+  filename: 'plugin-#simple#\\.zip'
+  download_url: https://example.com/old.zip
+`;
+        await writeFile(plugins, original);
+        let valid = false;
+        const requests = [];
+        globalThis.fetch = async (url) => {
+          requests.push(String(url));
+          if (String(url).endsWith("/downloads/")) {
+            return new Response('<a href="plugin-2.zip">download</a>');
+          }
+          return new Response(makeZip([["plugin/plugin.json", JSON.stringify({ version: valid ? "2" : "wrong" })]]));
+        };
+        assert.equal(await updatePlugins(plugins, marker), false);
+        assert.equal(await readFile(plugins, "utf8"), original);
+        assert.match(await readFile(marker, "utf8"), /check .*does not match catalog version/);
+        valid = true;
+        assert.equal(await updatePlugins(plugins, marker), true);
+        assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/example.com\/downloads\/plugin-2.zip/);
+        assert.deepEqual(requests, [
+          "https://example.com/downloads/", "https://example.com/downloads/plugin-2.zip",
+          "https://example.com/downloads/", "https://example.com/downloads/plugin-2.zip",
+        ]);
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
   } finally {
     globalThis.fetch = originalFetch;
   }

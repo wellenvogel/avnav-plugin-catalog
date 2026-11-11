@@ -47,7 +47,7 @@ Plugin catalog entries can be updated in two ways:
 
 ### Automatic updates
 
-An entry is updated automatically when a recognized update method is configured in the `update` field. The plugin then displays the 🔄 indicator. The currently available methods are `github` and `repository`.
+An entry is updated automatically when a recognized update method is configured in the `update` field. The plugin then displays the 🔄 indicator. The currently available methods are `github`, `repository` and `directory`.
 
 #### GitHub updates
 
@@ -76,6 +76,12 @@ If the check succeeds, the version and download link are updated.
 
 This update method reads the repository metadata to determine the version and creates download links for the packages. Within AvNav, such installations and updates are handled by the [Updater](https://github.com/wellenvogel/avnav-update-plugin).
 
+#### Directory updates
+
+Set `directory` to the URL of an HTML directory listing and `filename` to a JavaScript regular expression matching the end of the download filename. The first capturing group supplies the version, or the whole match if there is no group. As with `release_pattern`, `#semver#` and `#simple#` are available; for example, `plugin-#semver#\.zip` selects files such as `plugin-1.2.3.zip`.
+
+The updater selects the highest matching version and its download link. If all matches are SemVer versions, they are ordered according to SemVer; otherwise, natural numeric ordering is used for all matches. If no version can be extracted, the update fails. ZIP downloads are checked before changes are saved.
+
 ### Manual updates
 
 If no automatic update is configured, the author must update the entry manually.
@@ -84,7 +90,7 @@ The following fields describe the information needed for an update:
 
 {% include plugin-fields-table.html fields="name,version,minversion,download_url" %}
 
-For ZIP plugins, provide the download URL if it has changed. If the automatic `github` or `repository` update mode is enabled for the plugin, no manual update is needed.
+For ZIP plugins, provide the download URL if it has changed. If an automatic update mode is enabled for the plugin, no manual update is needed.
 
 {% capture update_body %}{% include plugin-email-body.txt fields="name,version,minversion,download_url" update=true %}{% endcapture %}
 

@@ -24,6 +24,22 @@ occurrences of the extracted version in the final two path segments with
 unchanged. If the current URL already resolves to the asset URL, it is left
 unchanged.
 
+## Directory updates
+
+For `update: directory`, set `directory` to an HTTP(S) HTML directory listing
+and `filename` to a JavaScript regular expression that matches the end of a
+download filename. The same `#semver#` and `#simple#` placeholders and
+capture rules as `release_pattern` apply. For example,
+`plugin-#semver#\.zip` extracts the version from `plugin-1.2.3.zip`.
+Links are resolved against the response URL and any HTML `<base>` URL. Among
+matching links, the highest version is selected: if all extracted versions
+are SemVer, they are compared according to SemVer; otherwise all versions use
+natural numeric ordering. When
+versions compare equal, the first link is used. A missing version or a failed
+request is an error. The updater sets `version` and `download_url` as needed,
+and preserves an existing `$version` URL template if it resolves to the
+selected link. The normal type-specific checker validates proposed changes.
+
 ## Update checks
 
 When an updater proposes changed fields, the updater loads

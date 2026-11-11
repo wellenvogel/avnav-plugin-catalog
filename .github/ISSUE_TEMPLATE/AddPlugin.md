@@ -43,10 +43,10 @@ Please provide the following information for the plugin catalog:
 **license** (Optional. An abbreviation identifying the plugin license.):
 >
 
-**update** (Optional. `github` checks the repository in `src_url` for releases and updates `version` using the release name or `release_pattern`. It is valid for `zip` plugins only. If `filename` is provided, a matching release asset also updates `download_url`. `repository` updates packages from a configured Debian repository.):
+**update** (Optional. `github` checks the repository in `src_url` for releases and updates `version` using the release name or `release_pattern`. It is valid for `zip` plugins only. If `filename` is provided, a matching release asset also updates `download_url`. `repository` updates packages from a configured Debian repository. `directory` finds downloads in the configured directory URL using the `filename` pattern.):
 >
 
-**filename** (Optional for `github`. Search release assets for this filename and set `download_url` to the matching asset URL. The filename may contain `$version` as a placeholder.):
+**filename** (For `github`, optionally search release assets for this filename, which may contain `$version`. For `directory`, this is a required JavaScript regular expression matching the end of a filename and extracting its version using the same rules as `release_pattern`.):
 >
 
 **release_pattern** (Optional for `github`. A JavaScript regular expression to extract the version from the release name. Use `#semver#` or `#simple#` for predefined patterns, for example `v#semver#`. The first capturing group supplies the version; without a group, the entire match is used.):
