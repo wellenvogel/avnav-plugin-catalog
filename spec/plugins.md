@@ -276,6 +276,10 @@ If no variants are given, default to all variants from packages.yml.
 ## Updates
 
 The known update types and their handling is described below.
+The card's automatic-update indicator recognizes `github` and `repository` in
+`docs/_includes/list-container.html`. When adding or removing an updater module
+(`tools/update_<type>.js`), keep this list and the indicator tests in
+`tests/card-update-indicator.test.rb` in sync.
 
 To run the update change to the base directory and run
 

@@ -43,6 +43,50 @@ gesendet werden; alternativ kann in diesem Repository ein [Issue]({{site.github.
 
 ## Update eines Plugins
 
+Plugin updates im Katalog können auf zwei Arten erfolgen:
+
+ * automatisch
+ * manuell
+
+### Automatischer Update
+
+Der Eintrag wird automatisch aktualisiert, wenn eine bekannte Update Funktion hinterlegt ist (Eigenschaft `update`). Beim jeweiligen Plugin wird dann der Indicator 🔄 angezeigt. Momentan sind die Funktionen `github` und `repository` verfügbar.
+
+#### Update github
+
+Für diesen Update Typ muss `src_url` auf ein GitHub-Repository verweisen.
+Für jede neue Version muss im Repository eine Release erzeugt werden, die aktuellste muss als "Latest" gekennzeichnet sein. 
+Der Name der Release und das Tag müssen der Version entsprechen. Als Bestandteil der Release muss das Plugin-Zip als Release-Asset gespeichert werden. Im Plugin muss eine `plugin.json` existieren, die einen Versions-Eintrag enthält, der dem Release-Namen entspricht. 
+
+Für den Dateinamen des Plugins kann mit `filename` ein Pattern angegeben werden, dann wird das entsprechende Release-Asset gewählt.
+
+Beispiel: `avnav-testplugin-$version.zip`
+
+Falls der Name (oder Release Tag) nicht exakt die Version ist sondern z.B. noch einen Prefix oder Suffix enthält, kann ein Parameter `release_pattern` angegeben werden. Das ist eine regular expression, deren erste Matchgrupppe als Version verwendet wird. Zur Vereinfachung können dabei  `#semver#` oder `#simple#` genutzt werden.
+
+Beispiele:
+
+| Release-Name | `release_pattern` | Version
+| --- | --- | --- |
+| v20260901 | v#simple# | 20260901 |
+| release-0.0.1 | release-#semver# | 0.0.1 |
+
+
+Der Katalog prüft jeden Tag, ob eine Release existiert, bestimmt die Version aus dem Release-Namen (wenn release_pattern angegeben ist wird auch noch alternativ das release_tag versucht) und prüft, ob ein Release-Asset mit dem Namen `filename` vorhanden ist.
+
+Die zip-Datei wird heruntergeladen und es wird geprüft, das sie ein Plugin-Verzeichnis mit einer plugin.json mit korrekter Version enhält.
+
+Bei Erfolg werden Version und Download-Link aktualisiert.
+
+#### Update repository
+
+Diese Update-Funktion liest die Repository-Metadaten und ermittelt darüber die Version.
+Es werden entsprechende Download-Links für die Pakete erzeugt. Innerhalb von AvNav werden solche Installationen oder Updates über den [Updater](https://github.com/wellenvogel/avnav-update-plugin) ausgeführt. 
+
+### Manueller Update
+
+Wenn keine automatische Aktualisierung konfiguriert ist, muss der Eintrag durch den Autor manuell aktualisiert werden.
+
 Die folgenden Felder beschreiben die für ein Update benötigten Informationen:
 
 {% include plugin-fields-table.html fields="name,version,minversion,download_url" %}

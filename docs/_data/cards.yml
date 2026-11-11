@@ -1,6 +1,9 @@
 name:
   en: Name
   de: Name
+automatic_update:
+  en: Automatic update configured
+  de: Automatische Aktualisierung konfiguriert
 description:
   en: Description
   de: Beschreibung

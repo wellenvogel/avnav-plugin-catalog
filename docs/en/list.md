@@ -9,5 +9,6 @@
 # AvNav plugins
 
 The list is updated on a daily basis and is used by AvNav to check for plugin updates.
+🔄 indicates that automatic catalog updates are configured for the plugin.
 For packages with repository variants, select `[repository]` to see the available
 variants and download their packages.
