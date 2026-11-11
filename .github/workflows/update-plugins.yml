@@ -2,7 +2,7 @@ name: Update plugin catalog
 
 on:
   schedule:
-    - cron: "17 21 * * *"
+    - cron: "17 03 * * *"
   workflow_dispatch:
 
 permissions:
