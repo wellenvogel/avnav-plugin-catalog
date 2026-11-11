@@ -1,5 +1,16 @@
 import { expandPattern, matchVersion } from "./version_pattern.js";
 
+function templateDownloadUrl(url, version) {
+  if (url.includes("$version")) return url;
+  const match = /^(https?:\/\/[^/?#]+)(\/[^?#]*)([?#].*)?$/i.exec(url);
+  if (!match) return url;
+  const segments = match[2].split("/");
+  for (let index = Math.max(1, segments.length - 2); index < segments.length; index++) {
+    segments[index] = segments[index].split(version).join("$version");
+  }
+  return match[1] + segments.join("/") + (match[3] ?? "");
+}
+
 function releaseVersion(entry, release) {
   if (entry.release_pattern === undefined || entry.release_pattern === null) {
     if (typeof release.name !== "string" || release.name.length === 0) {
@@ -89,8 +100,11 @@ export default async function updateGithub(entry, options = {}) {
     if (typeof asset.browser_download_url !== "string" || !asset.browser_download_url) {
       throw new Error(`Release asset "${filename}" for ${entry.name} has no download URL`);
     }
-    if (asset.browser_download_url !== entry.download_url) {
-      updates.download_url = asset.browser_download_url;
+    const currentUrl = typeof entry.download_url === "string"
+      ? entry.download_url.split("$version").join(version)
+      : entry.download_url;
+    if (asset.browser_download_url !== currentUrl) {
+      updates.download_url = templateDownloadUrl(asset.browser_download_url, version);
     }
   }
 

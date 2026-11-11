@@ -49,12 +49,16 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
   await rm(markerFile, { force: true });
   const updatedRows = [];
   const errorRows = [];
+  const repositoryIndexCache = new Map();
 
   try {
     const source = await readFile(pluginsFile, "utf8");
     const document = YAML.parseDocument(source);
     if (document.errors.length > 0) {
-      throw new AggregateError(document.errors, `Failed to parse ${pluginsFile}`);
+      const details = document.errors.map((error) =>
+        `[${error.code}] ${error.message.trimEnd()}`
+      ).join("\n\n");
+      throw new AggregateError(document.errors, `Failed to parse ${pluginsFile}:\n${details}`);
     }
     const entries = document.toJS();
     if (!Array.isArray(entries)) {
@@ -76,7 +80,9 @@ export async function updatePlugins(pluginsFile, markerFile, updater = updateEnt
       let changedFields = {};
       if (!options.skipUpdate) {
         try {
-          const updates = await updater(structuredClone(entry), options);
+          const updates = updater === updateEntry
+            ? await updater(structuredClone(entry), { ...options, repositoryIndexCache })
+            : await updater(structuredClone(entry), options);
           console.log(`Update result for ${JSON.stringify(entry.name ?? `entry ${index + 1}`)}: ${JSON.stringify(updates) ?? "undefined"}`);
           if (updates !== undefined && updates !== null) {
             if (

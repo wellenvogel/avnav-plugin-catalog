@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import { updatePlugins } from "../tools/update.js";
 
 test("reports updates, errors, and no-op runs", async () => {
@@ -42,6 +45,40 @@ test("reports updates, errors, and no-op runs", async () => {
 
     assert.equal(await updatePlugins(plugins, marker, async () => undefined), false);
     await assert.rejects(readFile(marker), { code: "ENOENT" });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("YAML parse diagnostics include every error and location in stderr and marker", async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "avnav-yaml-error-"));
+  const plugins = path.join(directory, "plugins.yml");
+  const marker = path.join(directory, ".update");
+  const script = fileURLToPath(new URL("../tools/update.js", import.meta.url));
+  const source = "- name: first\n  name: second\n- name: [broken\n";
+  try {
+    await writeFile(plugins, source);
+    await assert.rejects(promisify(execFile)(process.execPath, [script, plugins, marker]), (error) => {
+      assert.equal(error.code, 1);
+      assert.ok(error.stderr.includes(`Failed to parse ${plugins}`));
+      assert.match(error.stderr, /\[DUPLICATE_KEY\].*line 2, column 3/);
+      assert.match(error.stderr, /\[BAD_INDENT\].*line 4, column 1/);
+      assert.match(error.stderr, /name: second/);
+      assert.match(error.stderr, /name: \[broken/);
+      return true;
+    });
+    const report = await readFile(marker, "utf8");
+    const lines = report.trimEnd().split("\n");
+    assert.equal(lines.length, 2);
+    assert.equal(lines[0], "ERROR");
+    assert.ok(lines[1].startsWith('"Updater": '));
+    const message = JSON.parse(lines[1].slice('"Updater": '.length));
+    assert.ok(message.includes(`Failed to parse ${plugins}`));
+    assert.match(message, /\[DUPLICATE_KEY\].*line 2, column 3/);
+    assert.match(message, /\[BAD_INDENT\].*line 4, column 1/);
+    assert.match(message, /name: second/);
+    assert.match(message, /name: \[broken/);
+    assert.equal(await readFile(plugins, "utf8"), source);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

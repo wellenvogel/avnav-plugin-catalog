@@ -18,6 +18,12 @@ the workflow token's access is limited to the current repository and public
 repositories. Command-line arguments may be visible to other users or saved in
 shell history, so avoid typing a token directly.
 
+For GitHub release assets, an updated download URL replaces literal
+occurrences of the extracted version in the final two path segments with
+`$version`. The hostname, other path segments, query and fragment remain
+unchanged. If the current URL already resolves to the asset URL, it is left
+unchanged.
+
 ## Update checks
 
 When an updater proposes changed fields, the updater loads
@@ -45,6 +51,8 @@ npm --prefix tools run update -- -c -n docs/_data/plugins.yml .updated
 
 The marker is created for errors (including check-only errors) or accepted
 updates; successful checks alone do not create a marker.
+YAML parse failures include the parser's error codes, locations and source
+context in both console output and the marker's JSON-encoded error message.
 
 The `zip` checker downloads the proposed `download_url` (substituting
 `$version`) and reads only `<name>/plugin.json` from the archive. It rejects
@@ -67,3 +75,6 @@ the same `#semver#` and `#simple#` placeholders and capture rules as
 `available` versions remain the full Debian package versions.
 Missing packages are omitted per variant; if none are found, the update fails.
 Index download or parsing errors also fail the update without partial changes.
+Within each updater run, successfully fetched package indexes are cached by
+repository URL and variant path; later plugins reuse them. Failed downloads are
+not cached, so a later plugin can retry. A new run fetches fresh indexes.

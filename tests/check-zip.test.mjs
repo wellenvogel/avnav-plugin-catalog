@@ -119,6 +119,41 @@ test("ZIP checker downloads and validates plugin metadata", async (t) => {
         await rm(directory, { recursive: true, force: true });
       }
     });
+
+    await t.test("checks a templated GitHub asset URL and stores the template", async () => {
+      const directory = await mkdtemp(path.join(os.tmpdir(), "avnav-github-zip-"));
+      try {
+        const plugins = path.join(directory, "plugins.yml");
+        const marker = path.join(directory, ".update");
+        const assetUrl = "https://github.com/owner/repo/releases/download/v2.0/plugin-2.0.zip";
+        const requests = [];
+        await writeFile(plugins, `- name: plugin
+  type: zip
+  version: "1.0"
+  src_url: https://github.com/owner/repo
+  download_url: https://example.com/old.zip
+  filename: plugin-$version.zip
+  release_pattern: v#semver#
+  update: github
+`);
+        globalThis.fetch = async (url) => {
+          requests.push(String(url));
+          if (String(url).startsWith("https://api.github.com/")) {
+            return new Response(JSON.stringify({
+              name: "v2.0.0",
+              assets: [{ name: "plugin-2.0.0.zip", browser_download_url: assetUrl.replaceAll("2.0", "2.0.0") }],
+            }));
+          }
+          return new Response(makeZip([["plugin/plugin.json", '{"version":"2.0.0"}']]));
+        };
+        assert.equal(await updatePlugins(plugins, marker), true);
+        assert.equal(requests[1], assetUrl.replaceAll("2.0", "2.0.0"));
+        assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/github\.com\/owner\/repo\/releases\/download\/v\$version\/plugin-\$version\.zip/);
+        assert.equal(await updatePlugins(plugins, marker), false);
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
   } finally {
     globalThis.fetch = originalFetch;
   }

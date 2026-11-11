@@ -34,7 +34,7 @@ test("GitHub release assets update plugin entries", async (t) => {
       const before = Date.now();
       const result = await updateGithub(entry);
       assert.equal(result.version, "2.0");
-      assert.equal(result.download_url, "https://example.com/plugin-2.0.zip");
+      assert.equal(result.download_url, "https://example.com/plugin-$version.zip");
       assert.ok(Date.parse(result.last_updated) >= before);
       assert.ok(Date.parse(result.last_updated) <= Date.now());
     });
@@ -42,7 +42,7 @@ test("GitHub release assets update plugin entries", async (t) => {
     await t.test("updates a changed asset URL even if the version is unchanged", async () => {
       const result = await updateGithub({ ...entry, version: "2.0" });
       assert.equal(result.version, undefined);
-      assert.equal(result.download_url, "https://example.com/plugin-2.0.zip");
+      assert.equal(result.download_url, "https://example.com/plugin-$version.zip");
       assert.ok(Number.isFinite(Date.parse(result.last_updated)));
     });
 
@@ -52,6 +52,32 @@ test("GitHub release assets update plugin entries", async (t) => {
         version: "2.0",
         download_url: "https://example.com/plugin-2.0.zip",
       }), undefined);
+      assert.equal(await updateGithub({
+        ...entry,
+        version: "2.0",
+        download_url: "https://example.com/plugin-$version.zip",
+      }), undefined);
+    });
+
+    await t.test("templates release tag and asset path without changing host or query", async () => {
+      const url = "https://2.0.example.com/owner2.0/repo/releases/download/v2.0/plugin-2.0-2.0.zip?version=2.0#2.0";
+      globalThis.fetch = async () => ({
+        ok: true, json: async () => ({ ...release, assets: [{ ...release.assets[0], browser_download_url: url }] }),
+      });
+      try {
+        const result = await updateGithub(entry);
+        assert.equal(result.download_url, "https://2.0.example.com/owner2.0/repo/releases/download/v$version/plugin-$version-$version.zip?version=2.0#2.0");
+        assert.equal(result.download_url.split("$version").join(result.version), url);
+        assert.equal(await updateGithub({ ...entry, version: "2.0", download_url: result.download_url }), undefined);
+      } finally {
+        globalThis.fetch = async () => ({ ok: true, json: async () => release });
+      }
+    });
+
+    await t.test("updates only version when an existing template resolves to the new asset", async () => {
+      const result = await updateGithub({ ...entry, download_url: "https://example.com/plugin-$version.zip" });
+      assert.equal(result.version, "2.0");
+      assert.equal(result.download_url, undefined);
     });
 
     await t.test("updates only the version when no filename is configured", async () => {
@@ -215,10 +241,10 @@ test("GitHub release assets update plugin entries", async (t) => {
         const marker = path.join(directory, ".update");
         await writeFile(plugins, `- name: plugin\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "2.0"\n  filename: plugin-$version-$version.zip\n  download_url: https://example.com/old.zip\n  update: github\n`);
         assert.equal(await updatePlugins(plugins, marker), true);
-        assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/example\.com\/plugin-2\.0\.zip/);
+        assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/example\.com\/plugin-\$version\.zip/);
         const report = await readFile(marker, "utf8");
         assert.match(report, /^UPDATED\n"plugin": /);
-        assert.match(report, /"download_url":"https:\/\/example\.com\/plugin-2\.0\.zip"/);
+        assert.match(report, /"download_url":"https:\/\/example\.com\/plugin-\$version\.zip"/);
         assert.match(report, /"last_updated":/);
         assert.doesNotMatch(report, /"version":/);
         assert.doesNotMatch(report, /\nERROR\n/);

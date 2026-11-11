@@ -78,7 +78,7 @@ function packageIndex(text, packageName) {
     !latest || compareVersions(item.version, latest.version) > 0 ? item : latest, undefined);
 }
 
-async function fetchIndex(base, distribution, directory) {
+async function downloadIndex(base, distribution, directory) {
   const indexUrl = new URL(`dists/${distribution}/${directory}/Packages`, base);
   const compressedUrl = `${indexUrl.href}.gz`;
   let response = await fetch(compressedUrl);
@@ -91,7 +91,23 @@ async function fetchIndex(base, distribution, directory) {
   return gunzipSync(Buffer.from(await response.arrayBuffer())).toString("utf8");
 }
 
-export default async function updateRepository(entry) {
+async function fetchIndex(base, distribution, directory, cache) {
+  if (!cache) return downloadIndex(base, distribution, directory);
+  const key = new URL(`dists/${distribution}/${directory}/Packages`, base).href;
+  if (!cache.has(key)) {
+    const request = downloadIndex(base, distribution, directory);
+    cache.set(key, request);
+    try {
+      return await request;
+    } catch (error) {
+      if (cache.get(key) === request) cache.delete(key);
+      throw error;
+    }
+  }
+  return await cache.get(key);
+}
+
+export default async function updateRepository(entry, options = {}) {
   if (entry.type !== "package") throw new Error(`Repository updater requires type package for ${entry.name}`);
   const repository = entry.repository;
   if (!repository || typeof repository !== "object" || Array.isArray(repository)) {
@@ -155,7 +171,7 @@ export default async function updateRepository(entry) {
   const available = {};
   let highest;
   for (const { variant, distribution, directory } of variants) {
-    const text = await fetchIndex(base, distribution, directory);
+    const text = await fetchIndex(base, distribution, directory, options.repositoryIndexCache);
     const item = packageIndex(text, repository.package);
     if (!item) continue;
     available[variant] = {
