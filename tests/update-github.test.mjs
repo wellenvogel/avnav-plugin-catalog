@@ -81,7 +81,12 @@ test("GitHub release assets update plugin entries", async (t) => {
         await writeFile(plugins, `- name: plugin\n  src_url: https://github.com/owner/repo\n  version: "2.0"\n  filename: plugin-$version-$version.zip\n  download_url: https://example.com/old.zip\n  update: github\n`);
         assert.equal(await updatePlugins(plugins, marker), true);
         assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/example\.com\/plugin-2\.0\.zip/);
-        assert.equal(await readFile(marker, "utf8"), "");
+        const report = await readFile(marker, "utf8");
+        assert.match(report, /^UPDATED\n"plugin": /);
+        assert.match(report, /"download_url":"https:\/\/example\.com\/plugin-2\.0\.zip"/);
+        assert.match(report, /"last_updated":/);
+        assert.doesNotMatch(report, /"version":/);
+        assert.doesNotMatch(report, /\nERROR\n/);
         assert.equal(await updatePlugins(plugins, marker), false);
         await assert.rejects(readFile(marker), { code: "ENOENT" });
       } finally {
@@ -100,6 +105,8 @@ test("GitHub release assets update plugin entries", async (t) => {
         assert.match(output, /name: missing[\s\S]*version: "1\.0"/);
         assert.match(output, /name: valid[\s\S]*version: "2\.0"/);
         assert.ok(errors.some((args) => String(args[0]).includes("missing")));
+        const report = await readFile(marker, "utf8");
+        assert.match(report, /^UPDATED\n"valid": .*"version":"2\.0".*\nERROR\n"missing": .*not found.*\n$/);
       } finally {
         await rm(directory, { recursive: true, force: true });
       }

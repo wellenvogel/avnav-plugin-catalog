@@ -28,16 +28,58 @@ jobs:
         run: npm install --prefix tools --no-package-lock
 
       - name: Update plugin catalog
-        run: node tools/update.js docs/_data/plugins.yml .update
+        id: update
+        continue-on-error: true
+        run: |
+          status=0
+          node tools/update.js docs/_data/plugins.yml .update || status=$?
+          if [ -f .update ]; then
+            cat .update
+          fi
+          exit "$status"
 
       - name: Commit and push changes
         run: |
+          git add -- docs/_data/plugins.yml
+          if git diff --cached --quiet -- docs/_data/plugins.yml; then
+            echo "No plugin catalog changes to commit."
+          else
+            status=$?
+            if [ "$status" -ne 1 ]; then
+              exit "$status"
+            fi
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update plugin catalog" -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+            git push
+          fi
+
+      - name: Upload update marker
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-update-marker
+          path: .update
+          include-hidden-files: true
+          if-no-files-found: ignore
+
+      - name: Report update errors
+        if: ${{ always() }}
+        env:
+          UPDATE_OUTCOME: ${{ steps.update.outcome }}
+        run: |
+          if [ "$UPDATE_OUTCOME" = failure ]; then
+            echo "::error::Plugin updater failed."
+            exit 1
+          fi
           if [ -f .update ]; then
-            git add -- docs/_data/plugins.yml
-            if ! git diff --cached --quiet -- docs/_data/plugins.yml; then
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git commit -m "Update plugin catalog" -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
-              git push
+            if grep -q '^ERROR$' .update; then
+              echo "::error::Plugin update marker contains errors."
+              exit 1
+            else
+              status=$?
+              if [ "$status" -ne 1 ]; then
+                exit "$status"
+              fi
             fi
           fi

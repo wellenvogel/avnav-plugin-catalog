@@ -220,6 +220,16 @@ npm --prefix tools run update -- docs/_data/plugins.yml .updated
 
 This command is also run by the daily GitHub action.
 
+The marker file is removed at the start of each run and created if there are updates or errors.
+It contains an `UPDATED` section with one line per changed plugin and its changed fields,
+and an `ERROR` section with one line per error. Sections without entries are omitted.
+Field values and messages are JSON-encoded. Errors for individual plugins are reported
+without preventing updates to other plugins.
+The GitHub action uploads the marker as the `plugin-update-marker` workflow artifact
+when it exists. It commits any catalog changes before failing the job if the marker
+contains errors or the updater fails. GitHub notifications depend on the owner's
+Actions notification settings.
+
 ### github
 
 The update will consider the `src_url` being a GitHub repository and will determine the latest release. It will consider the release name being the version. If it differs from the current version it will update `version` and `last_updated`. Only valid for type `zip`.
@@ -242,4 +252,3 @@ Keep links in descriptions where possible.
 - `visible: user update` means the field appears when requesting a plugin update (email and issue templates).
 
 **translation hints**: keep SemVer in english and german.
-

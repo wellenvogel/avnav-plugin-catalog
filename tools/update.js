@@ -25,69 +25,96 @@ async function updateEntry(entry) {
     if (error.code !== "ENOENT") {
       throw error;
     }
-    return undefined;
+    throw new Error(`Unknown update module: ${entry.update}`, { cause: error });
   }
 
-  try {
-    const updateModule = await import(pathToFileURL(modulePath).href);
-    if (typeof updateModule.default !== "function") {
-      throw new TypeError(`${modulePath} must have a default-exported async function`);
-    }
-    return await updateModule.default(entry);
-  } catch (error) {
-    console.error(
-      `Update failed for ${entry.name ?? "unknown plugin"} using ${entry.update}:`,
-      error
-    );
-    return undefined;
+  const updateModule = await import(pathToFileURL(modulePath).href);
+  if (typeof updateModule.default !== "function") {
+    throw new TypeError(`${modulePath} must have a default-exported async function`);
   }
+  return await updateModule.default(entry);
 }
 
 export async function updatePlugins(pluginsFile, markerFile, updater = updateEntry) {
   await rm(markerFile, { force: true });
-  const source = await readFile(pluginsFile, "utf8");
-  const document = YAML.parseDocument(source);
-  if (document.errors.length > 0) {
-    throw new AggregateError(document.errors, `Failed to parse ${pluginsFile}`);
-  }
-  const entries = document.toJS();
-  if (!Array.isArray(entries)) {
-    throw new TypeError(`Expected ${pluginsFile} to contain a YAML list`);
-  }
+  const updatedRows = [];
+  const errorRows = [];
 
-  let changed = false;
-
-  for (const [index, entry] of entries.entries()) {
-    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
-      throw new TypeError(`Expected every entry in ${pluginsFile} to be an object`);
+  try {
+    const source = await readFile(pluginsFile, "utf8");
+    const document = YAML.parseDocument(source);
+    if (document.errors.length > 0) {
+      throw new AggregateError(document.errors, `Failed to parse ${pluginsFile}`);
+    }
+    const entries = document.toJS();
+    if (!Array.isArray(entries)) {
+      throw new TypeError(`Expected ${pluginsFile} to contain a YAML list`);
     }
 
-    const updates = await updater(structuredClone(entry));
-    if (updates === undefined || updates === null) {
-      continue;
-    }
-    if (
-      typeof updates !== "object" ||
-      Array.isArray(updates) ||
-      ![Object.prototype, null].includes(Object.getPrototypeOf(updates))
-    ) {
-      throw new TypeError("The updater must return an object or no value");
-    }
+    for (const [index, entry] of entries.entries()) {
+      if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+        throw new TypeError(`Expected every entry in ${pluginsFile} to be an object`);
+      }
 
-    for (const [field, value] of Object.entries(updates)) {
-      if (!isDeepStrictEqual(entry[field], value)) {
-        document.setIn([index, field], value);
-        changed = true;
+      let changedFields;
+      try {
+        const updates = await updater(structuredClone(entry));
+        if (updates === undefined || updates === null) {
+          continue;
+        }
+        if (
+          typeof updates !== "object" ||
+          Array.isArray(updates) ||
+          ![Object.prototype, null].includes(Object.getPrototypeOf(updates))
+        ) {
+          throw new TypeError("The updater must return an object or no value");
+        }
+
+        changedFields = Object.fromEntries(
+          Object.entries(updates).filter(([field, value]) => !isDeepStrictEqual(entry[field], value))
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        const name = entry.name ?? `entry ${index + 1}`;
+        console.error(`Update failed for ${name} using ${entry.update}:`, error);
+        errorRows.push(`${JSON.stringify(name)}: ${JSON.stringify(message)}`);
+        continue;
+      }
+
+      if (Object.keys(changedFields).length > 0) {
+        for (const [field, value] of Object.entries(changedFields)) {
+          document.setIn([index, field], value);
+        }
+        updatedRows.push(`${JSON.stringify(entry.name ?? `entry ${index + 1}`)}: ${JSON.stringify(changedFields)}`);
       }
     }
+
+    if (updatedRows.length > 0) {
+      await writeFile(pluginsFile, document.toString(stringifyOptions), "utf8");
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    errorRows.push(`"Updater": ${JSON.stringify(message)}`);
+    try {
+      await writeFile(markerFile, `ERROR\n${errorRows.join("\n")}\n`, "utf8");
+    } catch (markerError) {
+      throw new AggregateError([error, markerError], "Updater and marker file write failed");
+    }
+    throw error;
   }
 
-  if (changed) {
-    await writeFile(pluginsFile, document.toString(stringifyOptions), "utf8");
-    await writeFile(markerFile, "", "utf8");
+  const sections = [];
+  if (updatedRows.length > 0) {
+    sections.push(`UPDATED\n${updatedRows.join("\n")}`);
+  }
+  if (errorRows.length > 0) {
+    sections.push(`ERROR\n${errorRows.join("\n")}`);
+  }
+  if (sections.length > 0) {
+    await writeFile(markerFile, `${sections.join("\n")}\n`, "utf8");
   }
 
-  return changed;
+  return updatedRows.length > 0;
 }
 
 async function main() {
