@@ -73,6 +73,107 @@ test("GitHub release assets update plugin entries", async (t) => {
       globalThis.fetch = async () => ({ ok: true, json: async () => release });
     });
 
+    await t.test("extracts SemVer including prerelease and build metadata for asset substitution", async () => {
+      globalThis.fetch = async () => ({
+        ok: true,
+        json: async () => ({
+          name: "v1.0.2-beta1+build.3",
+          assets: [{ name: "plugin-1.0.2-beta1+build.3-1.0.2-beta1+build.3.zip", browser_download_url: "https://example.com/new.zip" }],
+        }),
+      });
+      try {
+        const result = await updateGithub({ ...entry, release_pattern: "^v#semver#$" });
+        assert.equal(result.version, "1.0.2-beta1+build.3");
+        assert.equal(result.download_url, "https://example.com/new.zip");
+        assert.ok(Number.isFinite(Date.parse(result.last_updated)));
+        assert.equal(await updateGithub({
+          ...entry, release_pattern: "^v#semver#$", version: "1.0.2-beta1+build.3",
+          download_url: "https://example.com/new.zip",
+        }), undefined);
+      } finally {
+        globalThis.fetch = async () => ({ ok: true, json: async () => release });
+      }
+    });
+
+    await t.test("extracts simple and custom patterns, including whole matches", async () => {
+      globalThis.fetch = async () => ({ ok: true, json: async () => ({ name: "release v20260101", assets: [] }) });
+      try {
+        for (const pattern of ["v#simple#", "v([0-9]+)", "[0-9]+"]) {
+          const result = await updateGithub({ ...entry, filename: undefined, release_pattern: pattern });
+          assert.equal(result.version, "20260101");
+        }
+        const result = await updateGithub({ ...entry, filename: undefined, release_pattern: "(?:release )v#simple#" });
+        assert.equal(result.version, "20260101");
+      } finally {
+        globalThis.fetch = async () => ({ ok: true, json: async () => release });
+      }
+    });
+
+    await t.test("tries the tag when the release name cannot yield a version", async () => {
+      for (const name of ["Stable release", "", null, undefined, "v"]) {
+        globalThis.fetch = async () => ({
+          ok: true,
+          json: async () => ({
+            name, tag_name: "v20260101",
+            assets: [{ name: "plugin-20260101-20260101.zip", browser_download_url: "https://example.com/tag.zip" }],
+          }),
+        });
+        const result = await updateGithub({ ...entry, release_pattern: "^v#simple#$" });
+        assert.equal(result.version, "20260101");
+        assert.equal(result.download_url, "https://example.com/tag.zip");
+      }
+      globalThis.fetch = async () => ({ ok: true, json: async () => release });
+    });
+
+    await t.test("prefers a valid name match to the tag and preserves name-only behavior without a pattern", async () => {
+      globalThis.fetch = async () => ({
+        ok: true, json: async () => ({ name: "v2025", tag_name: "v2026", assets: [] }),
+      });
+      assert.equal((await updateGithub({ ...entry, filename: undefined, release_pattern: "^v#simple#$" })).version, "2025");
+      assert.equal((await updateGithub({ ...entry, filename: undefined })).version, "v2025");
+      globalThis.fetch = async () => ({ ok: true, json: async () => ({ name: null, tag_name: "v2026", assets: [] }) });
+      await assert.rejects(updateGithub({ ...entry, filename: undefined }), /has no name/);
+      globalThis.fetch = async () => ({ ok: true, json: async () => release });
+    });
+
+    await t.test("reports an error when neither name nor tag yields a version", async () => {
+      for (const tag_name of ["bad", "v", null, undefined, 12]) {
+        globalThis.fetch = async () => ({
+          ok: true, json: async () => ({ name: "release", tag_name, assets: [] }),
+        });
+        await assert.rejects(updateGithub({ ...entry, release_pattern: "^v#simple#$" }), /release name or tag/);
+      }
+      globalThis.fetch = async () => ({ ok: true, json: async () => release });
+    });
+
+    await t.test("rejects invalid patterns and missing or empty extracted versions", async () => {
+      for (const pattern of ["[", "", 123, "^v#semver#$", "^#simple#$", "(x)?2.0"]) {
+        await assert.rejects(updateGithub({ ...entry, release_pattern: pattern }), /release_pattern/);
+      }
+      globalThis.fetch = async () => ({ ok: true, json: async () => ({ name: "v", assets: [] }) });
+      try {
+        await assert.rejects(updateGithub({ ...entry, release_pattern: "v#simple#" }), /Could not extract/);
+      } finally {
+        globalThis.fetch = async () => ({ ok: true, json: async () => release });
+      }
+    });
+
+    await t.test("reports extraction errors and continues updating other entries", async () => {
+      const directory = await mkdtemp(path.join(os.tmpdir(), "avnav-github-pattern-"));
+      try {
+        const plugins = path.join(directory, "plugins.yml");
+        const marker = path.join(directory, ".update");
+        await writeFile(plugins, `- name: invalid\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "^v#semver#$"\n- name: valid\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "#simple#"\n`);
+        assert.equal(await updatePlugins(plugins, marker), true);
+        const output = await readFile(plugins, "utf8");
+        assert.match(output, /name: invalid[\s\S]*version: "1\.0"/);
+        assert.match(output, /name: valid[\s\S]*version: "2"/);
+        assert.match(await readFile(marker, "utf8"), /^UPDATED\n"valid": .*"version":"2".*\nERROR\n"invalid": .*Could not extract.*\n$/);
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+
     await t.test("persists an asset-only update and marker through the dispatcher", async () => {
       const directory = await mkdtemp(path.join(os.tmpdir(), "avnav-github-update-"));
       try {

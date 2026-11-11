@@ -43,8 +43,11 @@ Bitte ergänze die folgenden Angaben für den Plugin-Katalog:
 **license** (Optional. Eine Abkürzung für die Plugin-Lizenz.):
 >
 
-**update** (Optional. `github` prüft das Repository in `src_url` auf Releases mit der Versionsnummer als Namen und aktualisiert `version`. Nur für `zip`-Plugins gültig. Ist `filename` angegeben, aktualisiert ein passendes Release-Asset auch `download_url`.):
+**update** (Optional. `github` prüft das Repository in `src_url` auf Releases und aktualisiert `version` anhand des Release-Namens oder von `release_pattern`. Nur für `zip`-Plugins gültig. Ist `filename` angegeben, aktualisiert ein passendes Release-Asset auch `download_url`.):
 >
 
 **filename** (Optional für `github`. In den Release-Assets nach diesem Dateinamen suchen und `download_url` auf die URL des passenden Assets setzen. Der Dateiname kann `$version` als Platzhalter enthalten.):
+>
+
+**release_pattern** (Optional für `github`. Ein regulärer JavaScript-Ausdruck, um die Version aus dem Release-Namen zu ermitteln. `#semver#` oder `#simple#` können als vordefinierte Muster verwendet werden, zum Beispiel `v#semver#`. Die erste Fanggruppe liefert die Version; ohne Fanggruppe wird der gesamte Treffer verwendet.):
 >

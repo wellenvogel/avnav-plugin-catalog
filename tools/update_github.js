@@ -1,3 +1,38 @@
+const releasePatterns = {
+  "#semver#": String.raw`((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)`,
+  "#simple#": String.raw`([0-9]*)`,
+};
+
+function releaseVersion(entry, release) {
+  if (entry.release_pattern === undefined || entry.release_pattern === null) {
+    if (typeof release.name !== "string" || release.name.length === 0) {
+      throw new Error(`Latest GitHub release for ${entry.src_url} has no name`);
+    }
+    return release.name;
+  }
+  if (typeof entry.release_pattern !== "string" || entry.release_pattern.length === 0) {
+    throw new TypeError(`Invalid release_pattern for ${entry.name}: expected a non-empty string`);
+  }
+  const pattern = entry.release_pattern.replace(/#semver#|#simple#/g, (token) => releasePatterns[token]);
+  let expression;
+  try {
+    expression = new RegExp(pattern);
+  } catch (error) {
+    throw new Error(`Invalid release_pattern for ${entry.name}: ${error.message}`, { cause: error });
+  }
+  for (const candidate of [release.name, release.tag_name]) {
+    if (typeof candidate !== "string" || candidate.length === 0) {
+      continue;
+    }
+    const match = expression.exec(candidate);
+    const version = match && (match.length > 1 ? match[1] : match[0]);
+    if (version) {
+      return version;
+    }
+  }
+  throw new Error(`Could not extract a version from release name or tag for ${entry.name} using release_pattern`);
+}
+
 export default async function updateGithub(entry) {
   const sourceUrl = new URL(entry.src_url);
   if (sourceUrl.hostname !== "github.com") {
@@ -24,8 +59,8 @@ export default async function updateGithub(entry) {
   }
 
   const release = await response.json();
-  if (!release || typeof release.name !== "string" || release.name.length === 0) {
-    throw new Error(`Latest GitHub release for ${entry.src_url} has no name`);
+  if (!release || typeof release !== "object" || Array.isArray(release)) {
+    throw new Error(`Latest GitHub release for ${entry.src_url} is invalid`);
   }
   if (!Array.isArray(release.assets)) {
     throw new Error(`Latest GitHub release for ${entry.src_url} has an invalid assets list`);
@@ -37,16 +72,17 @@ export default async function updateGithub(entry) {
     console.log(`- ${asset.name}: ${asset.browser_download_url}`);
   }
 
+  const version = releaseVersion(entry, release);
   const updates = {};
-  if (release.name !== String(entry.version)) {
-    updates.version = release.name;
+  if (version !== String(entry.version)) {
+    updates.version = version;
   }
 
   if (entry.filename !== undefined && entry.filename !== null && entry.filename !== "") {
     if (typeof entry.filename !== "string") {
       throw new TypeError(`Invalid release asset filename for ${entry.name}: expected a string`);
     }
-    const filename = entry.filename.split("$version").join(release.name);
+    const filename = entry.filename.split("$version").join(version);
     const asset = release.assets.find((candidate) => candidate.name === filename);
     if (!asset) {
       throw new Error(`Release asset "${filename}" not found for ${entry.name}`);

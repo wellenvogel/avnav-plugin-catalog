@@ -120,7 +120,9 @@
   documentation: "https://github.com/Surfer2010/avnav-logbuch-plugin/"
   type: zip
   download_url: "https://github.com/Surfer2010/avnav-logbuch-plugin/releases/download/v2.1.0/avnav-logbuch-plugin-2.1.0.zip"
-  last_updated: 2026-11-10T20:22:50.502Z
+  last_updated: 2026-11-11T09:38:29.352Z
+  update: github
+  release_pattern: 'v#semver#'
 
 - name: vectorcharts
   description:

@@ -193,7 +193,7 @@ Existing non-empty values are preserved. The timestamp records when the field wa
 
 **description**: How the plugin info in the database is updated.
 
-`github`: src_url must point to a GitHub repository. The update expects a release to simply have the version number as name. It will check for new releases and update the `version` entry.
+`github`: src_url must point to a GitHub repository. By default the release name is the version number; `release_pattern` can extract it from the name instead. The updater checks for new releases and updates the `version` entry.
 If a `filename` is provided (can contain $version) the update will look for a file matching the filename in the assets directory and will update `download_url` with the url of this file.
 
 ### filename
@@ -206,6 +206,32 @@ If a `filename` is provided (can contain $version) the update will look for a fi
 **short**: Release assets file name.
 
 **description**: if `update`is `github` search for this file in the release assets and replace `download_url` with the URL of this file. The filename can contain $version as placeholder.
+
+### release_pattern
+**type**: regexp pattern
+
+**visible**: card no, user input: yes
+
+**mandatory**: no
+
+**short**: Regular Expression for version number
+
+**description**: Only for update=`github`. A regular expression to extract the version number from the release name. You can use any regexp and include the predefined pattern `#semver#` or `#simple#`
+
+--not for templates
+
+_#semver#_: `((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)`
+
+Example: `v#semver#` for a release name of `v1.0.2-beta1`
+
+_#simple#_: `([0-9]*)`
+
+Example: `v#simple#` for a release name of `v20260101`.
+
+Patterns use JavaScript regular expression syntax and match anywhere in the release name unless anchored. The first capturing group is the version; if there are no capturing groups, the entire match is the version. The predefined patterns each include a capturing group. If `release_pattern` is invalid, does not match, or yields an empty or unmatched version, the update fails.
+
+If release_pattern is given first try the release name and if the matching fails try the release tag.
+--end not for templates
 
 
 ## Updates
@@ -232,7 +258,7 @@ Actions notification settings.
 
 ### github
 
-The update will consider the `src_url` being a GitHub repository and will determine the latest release. It will consider the release name being the version. If it differs from the current version it will update `version` and `last_updated`. Only valid for type `zip`.
+The update will consider the `src_url` being a GitHub repository and will determine the latest release. It uses the release name as the version unless `release_pattern` is set. If the extracted version differs from the current version it will update `version` and `last_updated`. Only valid for type `zip`.
 
 If `documentation` contains `$version`, the rendered documentation link follows the current version automatically; the stored `documentation` value is not changed by the update.
 
@@ -250,5 +276,7 @@ Keep links in descriptions where possible.
 
 - `visible: user input` means the field appears when creating a plugin (email and issue templates).
 - `visible: user update` means the field appears when requesting a plugin update (email and issue templates).
+
+**never change this file without explicit permission**
 
 **translation hints**: keep SemVer in english and german.
