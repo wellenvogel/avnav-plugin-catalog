@@ -25,7 +25,7 @@ globalThis.fetch = async (url, options) => {
   return { ok: true, json: async () => ({ name: "2.0", assets: [] }) };
 };
 `);
-    const source = '- name: example\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n';
+    const source = '- name: example\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n';
     const invoke = async (args) => {
       await writeFile(catalog, source);
       return run(process.execPath, ["--import", preload, script, ...args], {

@@ -191,7 +191,7 @@ test("GitHub release assets update plugin entries", async (t) => {
       try {
         const plugins = path.join(directory, "plugins.yml");
         const marker = path.join(directory, ".update");
-        await writeFile(plugins, `- name: invalid\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "^v#semver#$"\n- name: valid\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "#simple#"\n`);
+        await writeFile(plugins, `- name: invalid\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "^v#semver#$"\n- name: valid\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n  release_pattern: "#simple#"\n`);
         assert.equal(await updatePlugins(plugins, marker), true);
         const output = await readFile(plugins, "utf8");
         assert.match(output, /name: invalid[\s\S]*version: "1\.0"/);
@@ -213,7 +213,7 @@ test("GitHub release assets update plugin entries", async (t) => {
       try {
         const plugins = path.join(directory, "plugins.yml");
         const marker = path.join(directory, ".update");
-        await writeFile(plugins, `- name: plugin\n  src_url: https://github.com/owner/repo\n  version: "2.0"\n  filename: plugin-$version-$version.zip\n  download_url: https://example.com/old.zip\n  update: github\n`);
+        await writeFile(plugins, `- name: plugin\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "2.0"\n  filename: plugin-$version-$version.zip\n  download_url: https://example.com/old.zip\n  update: github\n`);
         assert.equal(await updatePlugins(plugins, marker), true);
         assert.match(await readFile(plugins, "utf8"), /download_url: https:\/\/example\.com\/plugin-2\.0\.zip/);
         const report = await readFile(marker, "utf8");
@@ -234,7 +234,7 @@ test("GitHub release assets update plugin entries", async (t) => {
       try {
         const plugins = path.join(directory, "plugins.yml");
         const marker = path.join(directory, ".update");
-        await writeFile(plugins, `- name: missing\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  filename: missing.zip\n  update: github\n- name: valid\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n`);
+        await writeFile(plugins, `- name: missing\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  filename: missing.zip\n  update: github\n- name: valid\n  type: package\n  src_url: https://github.com/owner/repo\n  version: "1.0"\n  update: github\n`);
         assert.equal(await updatePlugins(plugins, marker), true);
         const output = await readFile(plugins, "utf8");
         assert.match(output, /name: missing[\s\S]*version: "1\.0"/);

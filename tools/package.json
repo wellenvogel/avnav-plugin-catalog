@@ -6,6 +6,7 @@
     "update": "node update.js"
   },
   "dependencies": {
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.1",
+    "yauzl": "^3.4.0"
   }
 }

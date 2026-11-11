@@ -10,10 +10,15 @@ test("reports updates, errors, and no-op runs", async () => {
   const plugins = path.join(directory, "plugins.yml");
   const marker = path.join(directory, ".update");
   const source = `- name: first
+  type: package
+  update: github
   version: "1"
 - name: second
+  type: package
+  update: github
   version: "1"
 - name: third
+  type: package
   version: "1"
 `;
   try {
@@ -25,14 +30,14 @@ test("reports updates, errors, and no-op runs", async () => {
     };
     assert.equal(await updatePlugins(plugins, marker, updater), true);
     assert.equal(await readFile(marker, "utf8"),
-      'UPDATED\n"first": {"version":"2","text":"one\\ntwo"}\nERROR\n"second": "failed\\nreason"\n');
+      'UPDATED\n"first": {"version":"2","text":"one\\ntwo"}\nERROR\n"second": "update (mode: \\"github\\"): failed\\nreason"\n');
 
     const afterUpdate = await readFile(plugins, "utf8");
     assert.equal(await updatePlugins(plugins, marker, async (entry) => {
       if (entry.name !== "third") throw new Error(`error in ${entry.name}`);
     }), false);
     assert.equal(await readFile(marker, "utf8"),
-      'ERROR\n"first": "error in first"\n"second": "error in second"\n');
+      'ERROR\n"first": "update (mode: \\"github\\"): error in first"\n"second": "update (mode: \\"github\\"): error in second"\n');
     assert.equal(await readFile(plugins, "utf8"), afterUpdate);
 
     assert.equal(await updatePlugins(plugins, marker, async () => undefined), false);
@@ -47,7 +52,7 @@ test("reports fatal catalog errors without saving pending updates", async () => 
   const plugins = path.join(directory, "plugins.yml");
   const marker = path.join(directory, ".update");
   try {
-    const source = "- name: first\n- invalid\n";
+    const source = "- name: first\n  type: package\n- invalid\n";
     await writeFile(plugins, source);
     await assert.rejects(updatePlugins(plugins, marker, async () => ({ version: "2" })), /every entry/);
     assert.equal(await readFile(plugins, "utf8"), source);
@@ -70,7 +75,7 @@ test("reports invalid or unknown updater modules and continues", async () => {
     await writeFile(plugins, source);
     assert.equal(await updatePlugins(plugins, marker), false);
     assert.match(await readFile(marker, "utf8"),
-      /^ERROR\n"invalid": "Invalid update module name: \.\.\/bad"\n"unknown": "Unknown update module: missing_module"\n$/);
+      /^ERROR\n"invalid": "update \(mode: \\"\.\.\/bad\\"\): Invalid update module name: \.\.\/bad"\n"unknown": "update \(mode: \\"missing_module\\"\): Unknown update module: missing_module"\n$/);
     assert.equal(await readFile(plugins, "utf8"), source);
   } finally {
     await rm(directory, { recursive: true, force: true });
