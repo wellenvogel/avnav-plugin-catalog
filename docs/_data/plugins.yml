@@ -86,42 +86,42 @@
   description:
     en: Package updater for AvNav Images and OpenPlotter
     de: Paket-Updater für AvNav Images und OpenPlotter
-  version: "20261029"
+  version: "20261111"
   author: wellenvogel
   license: MIT
   src_url: "https://github.com/wellenvogel/avnav-update-plugin"
   platform: [raspberry]
   documentation: "https://github.com/wellenvogel/avnav-update-plugin/blob/master/Readme.md"
   type: package
-  last_updated: 2026-11-11T15:30:15.036Z
+  last_updated: 2026-11-12T10:59:21.429Z
   update: repository
   repository:
     package: avnav-update-plugin
     available:
       trixie.armhf:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
       trixie.arm64:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
       trixie.amd64:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
       bookworm.armhf:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
       bookworm.arm64:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
       bookworm.amd64:
         package_name: avnav-update-plugin
-        version: "20261029"
-        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261029_all.deb
+        version: "20261111"
+        download_url: https://www.free-x.de/debian/pool/main/a/avnav-update-plugin/avnav-update-plugin_20261111_all.deb
 
 - name: mapproxy
   description:
