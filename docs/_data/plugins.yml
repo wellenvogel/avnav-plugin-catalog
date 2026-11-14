@@ -183,17 +183,17 @@
   description:
     en: Draws AIS CPA vectors and AIS ship dimensions
     de: Zeichnet AIS CPA Vektoren und AIS Schiffsdimensionen
-  version: "20261108"
+  version: "20261113"
   author: nocheinpeter
   license: MIT
   src_url: "https://github.com/nocheinpeter/avnav-aiscpaplugin"
   platform: [all]
   documentation: "https://github.com/nocheinpeter/avnav-aiscpaplugin/"
   type: zip
-  download_url: "https://github.com/nocheinpeter/avnav-aiscpaplugin/releases/download/releas20261108/avnav-aiscpaplugin-20261108.zip"
+  download_url: "https://github.com/nocheinpeter/avnav-aiscpaplugin/releases/download/release$version/avnav-aiscpaplugin-$version.zip"
   filename: "avnav-aiscpaplugin-$version.zip"
   minversion: "20260104"
-  last_updated: 2026-11-11T09:50:02.556Z
+  last_updated: 2026-11-14T02:09:15.677Z
   update: github
   release_pattern: '[^0-9]*#simple#'
 
