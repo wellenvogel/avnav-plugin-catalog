@@ -12,3 +12,6 @@ The list is updated on a daily basis and is used by AvNav to check for plugin up
 🔄 indicates that automatic catalog updates are configured for the plugin.
 For packages with repository variants, select `[repository]` to see the available
 variants and download their packages.
+
+Use the `name` URL parameter to prefill the search, for example `list.html?name=weather`.
+The search still applies the selected platform and type filters.

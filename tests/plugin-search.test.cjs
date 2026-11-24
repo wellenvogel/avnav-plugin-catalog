@@ -6,7 +6,7 @@ const vm = require("node:vm");
 
 const script = readFileSync(path.join(__dirname, "../docs/assets/js/plugin-search.js"), "utf8");
 
-function setup(extraCards = []) {
+function setup(extraCards = [], search = "", initialInput = "") {
   function control(value, checked = false) {
     return {
       value,
@@ -61,7 +61,7 @@ function setup(extraCards = []) {
   const packageType = control("package");
   const typeOptions = [bothTypes, zipType, packageType];
   const typeFilter = { hidden: true, querySelectorAll: () => typeOptions };
-  const input = control("");
+  const input = control(initialInput);
   const sortBy = control("version");
   const sortDirection = control("");
   sortDirection.dataset = {
@@ -72,11 +72,11 @@ function setup(extraCards = []) {
   sortDirection.textContent = "↓";
   input.focus = () => { input.focused = true; };
   const clear = control("");
-  const search = { classList: { toggle() {} } };
+  const searchContainer = { classList: { toggle() {} } };
   const document = {
     querySelector(selector) {
       return {
-        ".plugin-search": search,
+        ".plugin-search": searchContainer,
         ".plugin-platform-filter": platformFilter,
         ".plugin-type-filter": typeFilter,
       }[selector];
@@ -92,9 +92,33 @@ function setup(extraCards = []) {
       }[id];
     },
   };
-  vm.runInNewContext(script, { document, window: {}, console });
+  vm.runInNewContext(script, { document, window: { location: { search } }, URLSearchParams, console });
   return { cards, cardsContainer, all, android, linux, raspberry, windows, input, clear, platformFilter, typeFilter, bothTypes, zipType, packageType, sortBy, sortDirection };
 }
+
+test("name URL parameter initializes the search and combines with the existing filters", () => {
+  const { cards, input, clear, raspberry } = setup([], "?other=value&name=Linux%20plugin");
+  const hidden = () => cards.map((card) => card.hidden);
+
+  assert.equal(input.value, "Linux plugin");
+  assert.deepEqual(hidden(), [true, true, true, true]);
+  raspberry.checked = false;
+  raspberry.trigger("change");
+  assert.deepEqual(hidden(), [true, false, true, true]);
+  clear.trigger("click");
+  assert.equal(input.value, "");
+  assert.deepEqual(hidden(), [true, false, false, true]);
+});
+
+test("name URL parameter decodes special characters and distinguishes absence from empty", () => {
+  const extraCards = [{ name: "Marine + navigation", platforms: ["all"] }];
+  const named = setup(extraCards, "?name=Marine+%2B+navigation");
+  assert.equal(named.input.value, "Marine + navigation");
+  assert.deepEqual(named.cards.map((card) => card.hidden), [true, true, true, true, false]);
+
+  assert.equal(setup([], "?other=value", "restored").input.value, "restored");
+  assert.equal(setup([], "?name=", "restored").input.value, "");
+});
 
 test("all checkbox controls individual platforms and filtering uses only individual selections", () => {
   const { cards, all, android, linux, raspberry, windows, input, clear, platformFilter } = setup();

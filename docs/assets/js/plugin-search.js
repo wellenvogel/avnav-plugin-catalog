@@ -176,6 +176,10 @@
     updateSortDirectionControl();
     sortCards();
   });
+  const nameParameter = new URLSearchParams(window.location.search).get("name");
+  if (nameParameter !== null) {
+    searchInput.value = nameParameter;
+  }
   updateSortDirectionControl();
   sortCards();
   filterCards();
