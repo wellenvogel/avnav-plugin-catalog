@@ -452,3 +452,19 @@
         package_name: avnav-obp-plotterv3-plugin
         version: "20250317"
         download_url: https://www.free-x.de/debian/pool/main/a/avnav-obp-plotterv3-plugin/avnav-obp-plotterv3-plugin_20250317_all.deb
+
+- name: weather-route-viewer
+  description:
+    en: shows a route exported by weather-routing
+    de: Route aus Wetter-Routing Software auf der Karte
+  version: "0.9.0"
+  author: pozoo
+  platform: [all]
+  src_url: "https://github.com/pozoo/avnav-weather-route-viewer-plugin"
+  documentation: "https://github.com/pozoo/avnav-weather-route-viewer-plugin"
+  type: zip
+  release_pattern: "v#semver#"
+  filename: "weather-route-viewer-$version.zip"
+  update: github
+  download_url: https://github.com/pozoo/avnav-weather-route-viewer-plugin/releases/download/v$version/weather-route-viewer-$version.zip
+  last_updated: 2026-11-24T19:12:36.649Z
